@@ -1,0 +1,43 @@
+name: Foundation checks
+on:
+  pull_request:
+  push:
+    branches: [main, codex/marketplace-foundation]
+permissions:
+  contents: read
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --grep-invert 'failed sign-in'
+        env:
+          PLAYWRIGHT_CHANNEL: chromium
+          # No project credentials are needed: test the explicit fictional preview mode.
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Start isolated test database
+        run: |
+          docker run --name foundation-db -e POSTGRES_PASSWORD=local-test-only -d postgres:17
+          for i in {1..30}; do docker exec foundation-db pg_isready -U postgres && break; sleep 1; done
+      - name: Apply Supabase role shim, migrations, and isolation tests
+        run: |
+          docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/bootstrap.sql
+          for file in supabase/migrations/*.sql; do docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < "$file"; done
+          docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/rls.sql
