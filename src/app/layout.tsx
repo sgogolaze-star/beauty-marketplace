@@ -25,10 +25,15 @@ export default function RootLayout({
             <Link className="explore-link" href="/">
               Explore
             </Link>
-            <Link href="/account">My appointments</Link>
-            <Link href="/login" className="nav-pill">
-              Sign in <span aria-hidden="true">↗</span>
+            <Link className="appointments-link" href="/account">
+              My appointments
             </Link>
+            <div className="header-auth">
+              <Link href="/login">Sign in</Link>
+              <Link href="/login?mode=signup" className="nav-pill">
+                Sign up <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
           </nav>
         </header>
         <div id="content">{children}</div>
@@ -37,6 +42,7 @@ export default function RootLayout({
             <span>✳</span> bloom.
           </Link>
           <p>A little time. A good feeling. A little more you.</p>
+          <Link href="/account">My appointments</Link>
           <Link href="/business">For business ↗</Link>
           <span>Beauty & wellness, thoughtfully found.</span>
         </footer>

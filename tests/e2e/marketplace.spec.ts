@@ -2,27 +2,47 @@ import { test, expect } from "@playwright/test";
 test("registration offers customer, business and individual professional paths", async ({
   page,
 }) => {
-  await page.goto("/login?mode=signup");
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Main navigation" });
+  await expect(
+    nav.getByRole("link", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+  await nav.getByRole("link", { name: "Sign up", exact: false }).click();
   await expect(
     page.getByRole("button", { name: "Create customer account" }),
   ).toBeVisible();
-  const choices = page.getByRole("navigation", { name: "Account type" });
-  await expect(choices.getByRole("link")).toHaveCount(3);
-  await choices.getByRole("link", { name: "Business", exact: false }).click();
-  await expect(page.locator("input[name=registration_kind]")).toHaveValue(
-    "business",
-  );
+  await page.getByLabel("Email address").fill("typed@example.invalid");
+  await page.getByLabel("Full name").fill("Test Person");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("preserve-this-password");
+  const choices = page.getByRole("group", { name: "I’m joining as a" });
+  await expect(choices.getByRole("radio")).toHaveCount(3);
+  await choices.getByRole("radio", { name: "Business", exact: true }).check();
   await expect(
-    page.getByText("Create your account and confirm your email.", {
-      exact: false,
-    }),
+    page.getByText("For salons, studios and teams.", { exact: false }),
   ).toBeVisible();
-  await choices
-    .getByRole("link", { name: "Individual professional", exact: false })
-    .click();
-  await expect(page.locator("input[name=registration_kind]")).toHaveValue(
-    "professional",
+  await choices.getByRole("radio", { name: "Individual professional" }).check();
+  await expect(
+    choices.getByRole("radio", { name: "Individual professional" }),
+  ).toBeChecked();
+  await expect(page.getByLabel("Email address")).toHaveValue(
+    "typed@example.invalid",
   );
+  await expect(page.getByLabel("Full name")).toHaveValue("Test Person");
+  await expect(page.getByLabel("Password", { exact: true })).toHaveValue(
+    "preserve-this-password",
+  );
+  await choices.getByRole("radio", { name: "Customer", exact: true }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(
+    choices.getByRole("radio", { name: "Business", exact: true }),
+  ).toBeChecked();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBeTruthy();
 });
 
 test("discovery filters, studio navigation, and no horizontal overflow", async ({

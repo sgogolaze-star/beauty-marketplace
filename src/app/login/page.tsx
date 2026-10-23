@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { authenticate } from "@/app/auth/actions";
+import { AuthForm } from "@/components/auth-form";
 import { safeNext } from "@/lib/auth-validation";
-import { SubmitButton } from "@/components/submit-button";
 import { registrationType } from "@/lib/provider-validation";
 export const dynamic = "force-dynamic";
 export default async function Login({
@@ -33,84 +32,21 @@ export default async function Login({
         <h2>{signup ? "Make yourself at home." : "Good to see you again."}</h2>
         <p>
           {signup
-            ? kind === "customer"
-              ? "Create an account to discover and book services."
-              : "Create your account and confirm your email. Next, tell us about your services and submit an application for review."
+            ? "Your next good feeling starts here."
             : "Sign in to your personal space."}
         </p>
-        {signup && (
-          <nav className="registration-choices" aria-label="Account type">
-            {[
-              ["customer", "Customer", "Discover and book"],
-              ["business", "Business", "Register your salon or studio"],
-              [
-                "professional",
-                "Individual professional",
-                "Offer services independently",
-              ],
-            ].map(([value, label, description]) => (
-              <Link
-                className={kind === value ? "selected" : ""}
-                key={value}
-                href={`/login?mode=signup&as=${value}&next=${encodeURIComponent(next)}`}
-                aria-current={kind === value ? "page" : undefined}
-              >
-                <strong>{label}</strong>
-                <small>{description}</small>
-              </Link>
-            ))}
-          </nav>
-        )}
         {params.message && (
           <p className="notice" role="status">
             {params.message.slice(0, 300)}
           </p>
         )}
-        <form action={authenticate} className="stack">
-          <input type="hidden" name="registration_kind" value={kind} />
-          <input
-            type="hidden"
-            name="mode"
-            value={signup ? "signup" : "login"}
-          />
-          <input type="hidden" name="next" value={next} />
-          <label>
-            Email address
-            <input
-              required
-              type="email"
-              name="email"
-              autoComplete="email"
-              maxLength={254}
-              placeholder="you@example.com"
-            />
-          </label>
-          <label>
-            Password
-            <input
-              required
-              type="password"
-              name="password"
-              minLength={8}
-              maxLength={128}
-              autoComplete={signup ? "new-password" : "current-password"}
-              placeholder="At least 8 characters"
-            />
-          </label>
-          <SubmitButton>
-            {signup
-              ? kind === "customer"
-                ? "Create customer account"
-                : "Create account and continue"
-              : "Sign in"}
-          </SubmitButton>
-        </form>
+        <AuthForm signup={signup} initialKind={kind} next={next} />
         <p className="switch">
           {signup ? "Already have an account?" : "New here?"}{" "}
           <Link
             href={`/login?mode=${signup ? "login" : "signup"}&next=${encodeURIComponent(next)}`}
           >
-            {signup ? "Sign in" : "Create an account"} →
+            {signup ? "Sign in" : "Sign up"} →
           </Link>
         </p>
       </section>

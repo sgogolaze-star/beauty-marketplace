@@ -9,6 +9,9 @@ function valid() {
   const f = new FormData();
   for (const [key, value] of Object.entries({
     provider_type: "business",
+    legal_name: "Fixture Studio LLC",
+    contact_address: "Fixture street 10, Tbilisi",
+    operating_status: "company",
     public_name: "Bloom studio",
     contact_name: "Test applicant",
     phone: "+995 555 123 456",
@@ -44,6 +47,9 @@ test("provider application validates contact, services, experience and consent",
   assert.equal(providerDetails(valid())?.phone, "+995 555 123 456");
   for (const [key, value] of [
     ["phone", "invalid"],
+    ["legal_name", ""],
+    ["contact_address", "x"],
+    ["operating_status", "admin"],
     ["experience_years", "-1"],
     ["experience_years", "81"],
     ["provider_type", "admin"],
@@ -73,4 +79,13 @@ test("portfolio is optional and only secure links without embedded credentials a
   const f = valid();
   f.set("portfolio_url", "https://example.com/portfolio");
   assert.ok(providerDetails(f));
+});
+
+test("individuals are never asked to submit a personal identification number", () => {
+  const f = valid();
+  f.set("operating_status", "individual");
+  f.set("registration_number", "12345678901");
+  assert.equal(providerDetails(f), null);
+  f.delete("registration_number");
+  assert.equal(providerDetails(f)?.country_code, "GE");
 });

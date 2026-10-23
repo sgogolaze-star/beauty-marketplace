@@ -23,9 +23,12 @@ export async function authenticate(form: FormData) {
     fail("Account access is not configured yet. Please try again later.");
   const supabase = await createClient();
   if (mode === "signup") {
+    const fullName = String(form.get("full_name") ?? "").trim();
+    if (fullName.length < 2 || fullName.length > 100)
+      fail("Enter your name using 2 to 100 characters.");
     const { data, error } = await supabase.auth.signUp({
       ...input!,
-      options: { data: { registration_kind: kind } },
+      options: { data: { registration_kind: kind, full_name: fullName } },
     });
     if (error)
       fail("We could not create your account. Please try again later.");

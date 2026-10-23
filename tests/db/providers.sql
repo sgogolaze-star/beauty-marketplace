@@ -1,7 +1,7 @@
 begin;
 insert into auth.users(id) values('a2100000-0000-4000-8000-000000000001'),('a2100000-0000-4000-8000-000000000002'),('a2100000-0000-4000-8000-000000000003');
 create temp table provider_fixture(details jsonb);
-insert into provider_fixture values('{"provider_type":"business","public_name":"Provider fixture","contact_name":"Fixture Applicant","phone":"+995 555 123456","city":"Tbilisi","address_or_area":"Vake service area","work_mode":"studio","service_categories":["Hair"],"experience_years":3,"description":"Independent beauty services delivered with care and attention.","details_confirmed":true,"status":"approved","user_id":"a2100000-0000-4000-8000-000000000003"}');
+insert into provider_fixture values('{"provider_type":"business","public_name":"Provider fixture","contact_name":"Fixture Applicant","phone":"+995 555 123456","city":"Tbilisi","address_or_area":"Vake service area","work_mode":"studio","service_categories":["Hair"],"experience_years":3,"description":"Independent beauty services delivered with care and attention.","legal_name":"Fixture Studio LLC","contact_address":"Fixture Street 10, Tbilisi","operating_status":"company","country_code":"GE","details_confirmed":true,"status":"approved","user_id":"a2100000-0000-4000-8000-000000000003"}');
 grant select on provider_fixture to authenticated;
 set local role anon;
 do $$ begin
@@ -16,7 +16,11 @@ do $$declare payload jsonb;begin
   select details into payload from provider_fixture;
   begin perform public.submit_provider_application(payload||'{"phone":"abc"}');raise exception 'Invalid phone accepted';exception when check_violation then null;end;
   begin perform public.submit_provider_application(payload||'{"service_categories":["Unlisted"]}');raise exception 'Invalid services accepted';exception when check_violation then null;end;
-  perform public.submit_provider_application(payload);
+  begin perform public.submit_provider_application(payload-'legal_name');raise exception 'Missing legal identity accepted';exception when check_violation then null;end;
+  begin perform public.submit_provider_application(payload||'{"country_code":"XX"}');raise exception 'Wrong launch country accepted';exception when check_violation then null;end;
+  begin perform public.submit_provider_application(payload||'{"operating_status":"individual","registration_number":"12345678901"}');raise exception 'Personal identification code accepted';exception when check_violation then null;end;
+  perform public.submit_provider_application(payload||'{"declaration_version":"forged","declaration_at":"2000-01-01"}');
+  if not exists(select 1 from public.provider_applications where user_id=auth.uid() and legal_name='Fixture Studio LLC' and declaration_version='provider-declaration-v1' and declaration_at=now()) then raise exception 'Declaration audit was not set by server';end if;
   if not exists(select 1 from public.provider_applications where user_id=auth.uid() and status='pending' and approved_business_id is null and reviewed_at is null) then raise exception 'Forged status or identity accepted';end if;
   if exists(select 1 from public.businesses where owner_id=auth.uid()) then raise exception 'Pending applicant owns a business';end if;
   begin perform public.submit_provider_application(payload||'{"public_name":"Changed during review"}');raise exception 'Pending application changed during review';exception when invalid_parameter_value then null;end;

@@ -12,6 +12,7 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 - Approved owners can create/publish studios, add or hide treatments/professionals, assign treatments to professionals, add dated availability, and view/cancel upcoming appointments in `/business`.
 - Customers can choose a treatment, date, professional and time, confirm a pay-at-studio appointment, and cancel before it starts. `/book/[serviceId]` requires sign-in and shows only available slots.
 - Database-enforced overlap exclusion, server-set price/duration snapshots, stale-price checks, idempotent retries, a 30-minute lead time, 90-day booking horizon, and 10-upcoming-appointment customer limit. Direct appointment table writes remain revoked.
+- Adjacent Sign in / Sign up entry points and keyboard-accessible segmented account choices preserve entered details. Signup collects name/email/password; providers complete private contact, services and legal identity sections for the Georgia launch, with server-recorded declarations. See [registration research and remaining legal launch requirements](docs/registration-research.md).
 - Registration offers Customer, Business, and Individual professional paths. Providers complete a private application after account confirmation/sign-in. Customers do not need team approval.
 - Provider applications are reviewed in Supabase Table Editor. Approval automatically provisions an owner workspace and private draft studio; individual professionals also receive a professional profile. Rejections require a reason and allow resubmission. Pending details are locked during review. See [provider review guide](docs/provider-review.md).
 
@@ -40,7 +41,7 @@ Only a publishable key is required. Never add a service-role key, database passw
 
 ## Supabase migrations
 
-`supabase/migrations` matches the six migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
+`supabase/migrations` matches the seven migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
 
 Businesses are provisioned automatically when a trusted operator approves a pending application in Supabase. Applicants cannot write review status or business ownership. The private trigger provisions records atomically; public submission runs through an authenticated wrapper and private identity-checked helper. Registration metadata is a navigation hint only. Applicants can read only their own application and review records. Profiles can be created/updated only by their own user; profile IDs are immutable through the Data API.
 

@@ -39,11 +39,34 @@ test("provider submits an application and waits for review", async ({
         : "Professional display name",
     )
     .fill(f.name);
+  const providerType = page.getByRole("group", {
+    name: "Provider type",
+    exact: true,
+  });
+  await providerType
+    .getByRole("radio", {
+      name: f.kind === "business" ? "Individual professional" : "Business",
+      exact: true,
+    })
+    .check();
+  await providerType
+    .getByRole("radio", {
+      name: f.kind === "business" ? "Business" : "Individual professional",
+      exact: true,
+    })
+    .check();
+  await expect(page.locator("input[name=public_name]")).toHaveValue(f.name);
   await page
     .getByLabel(
       f.kind === "business" ? "Contact person’s full name" : "Your full name",
     )
     .fill("Test Provider");
+  await page
+    .getByLabel("Legal provider name", { exact: false })
+    .fill("Fixture Provider Legal Name");
+  await page
+    .getByLabel("Provider contact address", { exact: false })
+    .fill("Fixture Street 10, Tbilisi");
   await page.getByLabel("Phone number").fill("+995 555 000 123");
   await page.getByLabel("City", { exact: true }).fill("Tbilisi");
   await page
@@ -134,4 +157,38 @@ test("approved provider opens the provisioned draft workspace", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
+});
+
+test("provider keeps entered details when server validation fails", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop",
+    "Uses the rejected business fixture between review phases.",
+  );
+  await login(page, info.project.name);
+  await page.getByRole("link", { name: "Edit and resubmit" }).click();
+  await page
+    .getByLabel("Workspace address or service area", { exact: false })
+    .fill("New address preserved after validation");
+  await page.getByLabel("Where do you provide services?").selectOption("mixed");
+  await page.getByLabel("Hair", { exact: true }).uncheck();
+  await page.getByLabel("I confirm these details", { exact: false }).check();
+  await page
+    .getByRole("button", { name: "Submit updated application" })
+    .click();
+  await expect(page.locator("form").getByRole("alert")).toContainText(
+    "Your entered details have been kept",
+  );
+  await expect(page.locator("form").getByRole("alert")).toBeFocused();
+  await expect(
+    page.getByLabel("Workspace address or service area", { exact: false }),
+  ).toHaveValue("New address preserved after validation");
+  await expect(page.getByLabel("Where do you provide services?")).toHaveValue(
+    "mixed",
+  );
+  await expect(page.getByLabel("Hair", { exact: true })).not.toBeChecked();
+  await expect(page.locator("input[name=legal_name]")).toHaveValue(
+    "Fixture Provider Legal Name",
+  );
 });

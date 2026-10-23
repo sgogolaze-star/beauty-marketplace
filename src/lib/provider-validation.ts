@@ -41,7 +41,11 @@ export function providerDetails(form: FormData) {
     mode = get("work_mode"),
     experience = get("experience_years"),
     url = get("portfolio_url"),
-    number = get("registration_number");
+    number = get("registration_number"),
+    legalName = get("legal_name"),
+    contactAddress = get("contact_address"),
+    operatingStatus = get("operating_status"),
+    qualifications = get("qualification_summary");
   if (
     !["business", "professional"].includes(kind) ||
     name.length < 2 ||
@@ -66,6 +70,13 @@ export function providerDetails(form: FormData) {
         !providerCategories.includes(c as (typeof providerCategories)[number]),
     ) ||
     number.length > 64 ||
+    legalName.length < 2 ||
+    legalName.length > 150 ||
+    contactAddress.length < 5 ||
+    contactAddress.length > 300 ||
+    !["company", "sole_trader", "individual"].includes(operatingStatus) ||
+    (operatingStatus !== "company" && number !== "") ||
+    qualifications.length > 1000 ||
     form.get("details_confirmed") !== "on"
   )
     return null;
@@ -96,7 +107,12 @@ export function providerDetails(form: FormData) {
     experience_years: Number(experience),
     description,
     portfolio_url: url,
-    registration_number: kind === "business" ? number : "",
+    registration_number: number,
+    legal_name: legalName,
+    contact_address: contactAddress,
+    operating_status: operatingStatus,
+    qualification_summary: qualifications,
+    country_code: "GE",
     details_confirmed: true,
   };
 }

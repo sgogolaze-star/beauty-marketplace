@@ -1468,3 +1468,108 @@ footer > span {
     scroll-behavior: auto;
   }
 }
+
+.header-auth {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  white-space: nowrap;
+}
+.account-types {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.account-types legend {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.account-segments {
+  display: flex;
+  padding: 4px;
+  gap: 3px;
+  background: #eff0e9;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.account-segments label {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  cursor: pointer;
+}
+.account-segments input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+}
+.account-segments span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  min-height: 48px;
+  padding: 9px 5px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.account-segments input:checked + span {
+  background: var(--paper);
+  border-color: var(--ink);
+  box-shadow: 0 2px 4px #283a3210;
+  font-weight: 600;
+}
+.account-segments input:focus-visible + span {
+  outline: 3px solid #617944;
+  outline-offset: 2px;
+}
+.registration-help,
+.form-note {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0;
+}
+.signup-steps {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.signup-steps [aria-current] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.provider-form h2 {
+  font-size: 23px;
+  margin: 20px 0 0;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.provider-form label[hidden] {
+  display: none;
+}
+@media (max-width: 600px) {
+  .site-header .appointments-link {
+    display: none;
+  }
+  .header-auth {
+    gap: 14px;
+  }
+  .account-segments span {
+    font-size: 11px;
+  }
+  .provider-form-panel {
+    padding: 20px 16px;
+  }
+}

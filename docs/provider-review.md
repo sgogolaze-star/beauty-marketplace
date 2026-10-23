@@ -3,7 +3,7 @@
 Review is handled in the designated Supabase project. There is no app administrator account or review screen in this release.
 
 1. Open the project’s **Table Editor → provider_applications** and filter `status` to `pending`.
-2. Read the provider type, public name, contact person, phone, city, address/service area, work mode, service categories, experience, description, portfolio link, and optional business registration number.
+2. Read the public name, contact person, phone, location/service area, services, experience and portfolio. Also review `legal_name`, `operating_status`, `contact_address`, `country_code` (GE), optional company registration code and qualification summary. `declaration_version` and `declaration_at` record the accuracy/authority declaration. Verify relevant public registry details and service-specific credentials as appropriate; self-declarations are not verification. Request an updated application if legacy identity/declaration fields are NULL. See [Georgia registration research and launch requirements](registration-research.md).
 3. To approve, change **status** to **approved** and save. The database creates an owner workspace and a private draft studio in the same transaction. An individual professional also receives an active professional profile. Nothing is published automatically.
 4. To reject, enter a clear **review_reason** of at least five characters, then set **status** to **rejected**. You may save the reason first and the status afterward, or update both together. Applicants see the reason and can edit and resubmit.
 
