@@ -122,18 +122,21 @@ export type Database = {
           id: string;
           name: string;
           owner_id: string;
+          provider_type: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
           name: string;
           owner_id: string;
+          provider_type?: string;
         };
         Update: {
           created_at?: string;
           id?: string;
           name?: string;
           owner_id?: string;
+          provider_type?: string;
         };
         Relationships: [];
       };
@@ -154,6 +157,115 @@ export type Database = {
           id?: string;
         };
         Relationships: [];
+      };
+      provider_application_reviews: {
+        Row: {
+          decision: string;
+          id: string;
+          reason: string;
+          reviewed_at: string;
+          revision: number;
+          user_id: string;
+        };
+        Insert: {
+          decision: string;
+          id?: string;
+          reason: string;
+          reviewed_at?: string;
+          revision: number;
+          user_id: string;
+        };
+        Update: {
+          decision?: string;
+          id?: string;
+          reason?: string;
+          reviewed_at?: string;
+          revision?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "provider_application_reviews_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "provider_applications";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
+      provider_applications: {
+        Row: {
+          address_or_area: string;
+          approved_business_id: string | null;
+          city: string;
+          contact_name: string;
+          description: string;
+          experience_years: number;
+          phone: string;
+          portfolio_url: string;
+          provider_type: string;
+          public_name: string;
+          registration_number: string;
+          review_reason: string;
+          reviewed_at: string | null;
+          revision: number;
+          service_categories: string[];
+          status: string;
+          submitted_at: string;
+          user_id: string;
+          work_mode: string;
+        };
+        Insert: {
+          address_or_area: string;
+          approved_business_id?: string | null;
+          city: string;
+          contact_name: string;
+          description: string;
+          experience_years: number;
+          phone: string;
+          portfolio_url?: string;
+          provider_type: string;
+          public_name: string;
+          registration_number?: string;
+          review_reason?: string;
+          reviewed_at?: string | null;
+          revision?: number;
+          service_categories: string[];
+          status?: string;
+          submitted_at?: string;
+          user_id: string;
+          work_mode: string;
+        };
+        Update: {
+          address_or_area?: string;
+          approved_business_id?: string | null;
+          city?: string;
+          contact_name?: string;
+          description?: string;
+          experience_years?: number;
+          phone?: string;
+          portfolio_url?: string;
+          provider_type?: string;
+          public_name?: string;
+          registration_number?: string;
+          review_reason?: string;
+          reviewed_at?: string | null;
+          revision?: number;
+          service_categories?: string[];
+          status?: string;
+          submitted_at?: string;
+          user_id?: string;
+          work_mode?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "provider_applications_approved_business_id_fkey";
+            columns: ["approved_business_id"];
+            isOneToOne: false;
+            referencedRelation: "businesses";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       services: {
         Row: {
@@ -345,6 +457,10 @@ export type Database = {
         }[];
       };
       remove_availability: { Args: { p_id: string }; Returns: undefined };
+      submit_provider_application: {
+        Args: { p_details: Json };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;

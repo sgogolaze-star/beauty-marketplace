@@ -6,6 +6,126 @@
   --sage: #e8eddf;
   --accent: #d8e58d;
 }
+.registration-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin: 22px 0;
+}
+.registration-choices a {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 13px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.registration-choices a.selected {
+  background: var(--sage);
+  border-color: var(--ink);
+}
+.registration-choices strong,
+.registration-choices small {
+  display: block;
+}
+.registration-choices small {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.onboarding-shell > p {
+  max-width: 680px;
+}
+.provider-form-panel,
+.application-status {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 30px 0;
+}
+.provider-form-panel {
+  max-width: 800px;
+}
+.provider-form-panel .registration-choices {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 0;
+}
+.provider-form {
+  max-width: 650px;
+}
+.provider-form small {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.category-checks {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.category-checks legend {
+  font-size: 12px;
+}
+.provider-form .category-checks label,
+.provider-form .consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  line-height: 1.6;
+}
+.provider-form .category-checks input,
+.provider-form .consent-check input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 2px 0 0;
+  accent-color: var(--ink);
+}
+.application-status {
+  max-width: 800px;
+  background: var(--sage);
+}
+.application-status h2 {
+  font-size: 30px;
+  margin: 10px 0;
+}
+.application-status p {
+  margin: 14px 0;
+}
+.status-rejected {
+  background: #f5e9dd;
+}
+.review-reason {
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.auth-card .registration-choices {
+  grid-template-columns: 1fr;
+}
+.auth-wrap:has(.registration-choices) {
+  align-items: start;
+}
+.auth-wrap:has(.registration-choices) .auth-art {
+  margin-top: 45px;
+}
+@media (max-width: 640px) {
+  .provider-form-panel,
+  .application-status {
+    padding: 20px;
+  }
+  .category-checks {
+    grid-template-columns: 1fr;
+  }
+  .provider-form-panel .registration-choices {
+    grid-template-columns: 1fr;
+  }
+}
 .booking-layout {
   display: grid;
   grid-template-columns: 1.6fr 1fr;

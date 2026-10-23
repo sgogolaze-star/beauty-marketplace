@@ -2,6 +2,7 @@ import Link from "next/link";
 import { authenticate } from "@/app/auth/actions";
 import { safeNext } from "@/lib/auth-validation";
 import { SubmitButton } from "@/components/submit-button";
+import { registrationType } from "@/lib/provider-validation";
 export const dynamic = "force-dynamic";
 export default async function Login({
   searchParams,
@@ -11,6 +12,7 @@ export default async function Login({
   const params = await searchParams;
   const signup = params.mode === "signup";
   const next = safeNext(params.next);
+  const kind = registrationType(params.as);
   return (
     <main className="auth-wrap">
       <div className="auth-art">
@@ -31,15 +33,41 @@ export default async function Login({
         <h2>{signup ? "Make yourself at home." : "Good to see you again."}</h2>
         <p>
           {signup
-            ? "Create an account to keep your beauty plans in one place."
+            ? kind === "customer"
+              ? "Create an account to discover and book services."
+              : "Create your account and confirm your email. Next, tell us about your services and submit an application for review."
             : "Sign in to your personal space."}
         </p>
+        {signup && (
+          <nav className="registration-choices" aria-label="Account type">
+            {[
+              ["customer", "Customer", "Discover and book"],
+              ["business", "Business", "Register your salon or studio"],
+              [
+                "professional",
+                "Individual professional",
+                "Offer services independently",
+              ],
+            ].map(([value, label, description]) => (
+              <Link
+                className={kind === value ? "selected" : ""}
+                key={value}
+                href={`/login?mode=signup&as=${value}&next=${encodeURIComponent(next)}`}
+                aria-current={kind === value ? "page" : undefined}
+              >
+                <strong>{label}</strong>
+                <small>{description}</small>
+              </Link>
+            ))}
+          </nav>
+        )}
         {params.message && (
           <p className="notice" role="status">
             {params.message.slice(0, 300)}
           </p>
         )}
         <form action={authenticate} className="stack">
+          <input type="hidden" name="registration_kind" value={kind} />
           <input
             type="hidden"
             name="mode"
@@ -69,7 +97,13 @@ export default async function Login({
               placeholder="At least 8 characters"
             />
           </label>
-          <SubmitButton>{signup ? "Create account" : "Sign in"}</SubmitButton>
+          <SubmitButton>
+            {signup
+              ? kind === "customer"
+                ? "Create customer account"
+                : "Create account and continue"
+              : "Sign in"}
+          </SubmitButton>
         </form>
         <p className="switch">
           {signup ? "Already have an account?" : "New here?"}{" "}

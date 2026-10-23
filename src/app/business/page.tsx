@@ -63,12 +63,12 @@ export default async function Business({
         <div className="empty">
           <h2>Business approval comes first.</h2>
           <p>
-            Your account doesn’t have an approved business yet. An operator must
-            verify the business and link ownership before you can publish
-            studios or manage appointments.
+            Register your business or individual professional profile. Our team
+            will review your application before you can publish a studio or
+            manage bookings.
           </p>
-          <Link className="button secondary" href="/account">
-            Back to my account
+          <Link className="button secondary" href="/onboarding">
+            Apply or check application
           </Link>
         </div>
       </main>

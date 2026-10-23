@@ -55,7 +55,10 @@ export default async function Account({
         </p>
       )}
       <Link className="back" href="/business">
-        Manage my business ↗
+        Provider workspace ↗
+      </Link>
+      <Link className="back" href="/onboarding">
+        Provider application & status ↗
       </Link>
       <section className="empty">
         <span className="empty-icon">✧</span>

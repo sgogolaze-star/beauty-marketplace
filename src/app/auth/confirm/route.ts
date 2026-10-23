@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { registrationDestination } from "@/lib/provider-validation";
 export async function GET(request: NextRequest) {
   const token_hash = request.nextUrl.searchParams.get("token_hash");
   const type = request.nextUrl.searchParams.get("type");
@@ -9,7 +10,17 @@ export async function GET(request: NextRequest) {
       token_hash,
       type: "email",
     });
-    if (!error) return NextResponse.redirect(new URL("/account", request.url));
+    if (!error) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      return NextResponse.redirect(
+        new URL(
+          registrationDestination(user?.user_metadata?.registration_kind),
+          request.url,
+        ),
+      );
+    }
   }
   return NextResponse.redirect(
     new URL(

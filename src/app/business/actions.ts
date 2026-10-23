@@ -38,17 +38,15 @@ export async function manageBusiness(form: FormData) {
       slug.length > 100
     )
       fail();
-    const { error } = await supabase
-      .from("venues")
-      .insert({
-        business_id: business,
-        name,
-        slug,
-        city,
-        category,
-        neighborhood: get("neighborhood"),
-        description: get("description"),
-      });
+    const { error } = await supabase.from("venues").insert({
+      business_id: business,
+      name,
+      slug,
+      city,
+      category,
+      neighborhood: get("neighborhood"),
+      description: get("description"),
+    });
     if (error) fail(error.code === "23505" ? "slug" : "invalid");
   } else {
     const venue = get("venue_id");
@@ -73,15 +71,13 @@ export async function manageBusiness(form: FormData) {
         name.length > 150
       )
         fail();
-      const { error } = await supabase
-        .from("services")
-        .insert({
-          venue_id: venue,
-          name,
-          price_minor: price!,
-          duration_minutes: duration,
-          active: true,
-        });
+      const { error } = await supabase.from("services").insert({
+        venue_id: venue,
+        name,
+        price_minor: price!,
+        duration_minutes: duration,
+        active: true,
+      });
       if (error) fail();
     } else if (op === "staff") {
       const name = get("name");
@@ -109,14 +105,12 @@ export async function manageBusiness(form: FormData) {
         Date.parse(start!) >= Date.parse(end!)
       )
         fail();
-      const { error } = await supabase
-        .from("availability")
-        .insert({
-          venue_id: venue,
-          staff_id: staff,
-          starts_at: start!,
-          ends_at: end!,
-        });
+      const { error } = await supabase.from("availability").insert({
+        venue_id: venue,
+        staff_id: staff,
+        starts_at: start!,
+        ends_at: end!,
+      });
       if (error) fail(error.code === "23P01" ? "overlap" : "invalid");
     } else if (op === "remove_availability") {
       const id = get("id");

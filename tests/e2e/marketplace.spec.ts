@@ -1,4 +1,29 @@
 import { test, expect } from "@playwright/test";
+test("registration offers customer, business and individual professional paths", async ({
+  page,
+}) => {
+  await page.goto("/login?mode=signup");
+  await expect(
+    page.getByRole("button", { name: "Create customer account" }),
+  ).toBeVisible();
+  const choices = page.getByRole("navigation", { name: "Account type" });
+  await expect(choices.getByRole("link")).toHaveCount(3);
+  await choices.getByRole("link", { name: "Business", exact: false }).click();
+  await expect(page.locator("input[name=registration_kind]")).toHaveValue(
+    "business",
+  );
+  await expect(
+    page.getByText("Create your account and confirm your email.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await choices
+    .getByRole("link", { name: "Individual professional", exact: false })
+    .click();
+  await expect(page.locator("input[name=registration_kind]")).toHaveValue(
+    "professional",
+  );
+});
 
 test("discovery filters, studio navigation, and no horizontal overflow", async ({
   page,
