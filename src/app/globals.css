@@ -6,6 +6,243 @@
   --sage: #e8eddf;
   --accent: #d8e58d;
 }
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
+  margin-top: 30px;
+}
+.booking-layout h2 {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+.booking-layout > section > p {
+  font-size: 13px;
+}
+.date-picker,
+.inline-form {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 25px 0;
+}
+.date-picker label,
+.inline-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  flex: 1;
+  min-width: 150px;
+}
+.date-picker input,
+.inline-form input,
+select,
+textarea {
+  border: 1px solid #bfc5b8;
+  border-radius: 7px;
+  padding: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  max-width: 100%;
+  min-width: 0;
+}
+select,
+textarea {
+  width: 100%;
+}
+textarea {
+  min-height: 100px;
+}
+.slot-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.slot-fieldset legend {
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.slot-option {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+.slot-option:has(input:checked) {
+  background: var(--sage);
+  border-color: var(--ink);
+}
+.slot-option input {
+  accent-color: var(--ink);
+  width: auto;
+}
+.stack .slot-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stack .slot-option input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+}
+.slot-option strong {
+  font-size: 15px;
+}
+.slot-option small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.booking-summary {
+  position: sticky;
+  top: 25px;
+}
+.booking-summary hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 24px 0;
+}
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.booking-terms,
+.muted-small {
+  font-size: 12px;
+}
+.cancel-details {
+  font-size: 12px;
+  margin-top: 15px;
+}
+.cancel-details p {
+  margin: 12px 0;
+}
+.cancel-details .button {
+  padding: 10px 16px;
+  min-height: 38px;
+}
+summary {
+  cursor: pointer;
+  line-height: 1.5;
+}
+.workspace-panel {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px;
+  margin: 28px 0;
+}
+.workspace-panel > summary {
+  font-size: 20px;
+}
+.workspace-panel h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 24px 0 12px;
+}
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+.workspace-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 25px;
+}
+.workspace-list li {
+  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.workspace-list p {
+  font-size: 12px;
+  margin-top: 5px;
+}
+.text-button {
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  font-size: 12px;
+  padding: 10px;
+  color: var(--ink);
+}
+footer > a:not(.brand) {
+  font-size: 11px;
+  white-space: nowrap;
+}
+.service-list li {
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.appointment-list li > div {
+  width: 100%;
+}
+.appointment-list li > div > p {
+  margin: 7px 0;
+}
+.appointment-list span {
+  display: block;
+}
+.booking-summary p {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 720px) {
+  .booking-layout,
+  .workspace-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .booking-summary {
+    position: static;
+    grid-row: 1;
+  }
+  .workspace-panel {
+    padding: 20px;
+  }
+  .workspace-panel .section-heading {
+    flex-wrap: wrap;
+  }
+  .inline-form {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .slot-grid {
+    grid-template-columns: 1fr;
+  }
+  .service-list li .button {
+    width: 100%;
+  }
+  .booking-layout h2 {
+    font-size: 26px;
+  }
+}
 * {
   box-sizing: border-box;
 }

@@ -6,13 +6,18 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 
 - Responsive discovery, treatment and city filters, studio details, useful empty/error states, and accessible account forms.
 - Supabase SSR email/password sign-in, sign-up, code exchange and email confirmation handlers, cookie refresh, verified server-side account access, and sign-out. Auth responses use private/no-store caching.
-- Six database tables: profiles, businesses, venues, services, staff, and appointments. Every table has RLS. Business ownership comes from operator-provisioned database records, never editable signup metadata.
+- Eight database tables: profiles, businesses, venues, services, staff, appointments, staff_services, and availability. Every table has RLS. Business ownership comes from operator-provisioned database records, never editable signup metadata.
 - Published venues and active services/staff are public. Customers read their own appointments and profiles. Owners manage only their businesses' catalog and read their businesses' appointments.
 - Generated database types, exact dependency versions, lockfile, unit tests, browser tests, transactional RLS tests, and CI.
+- Approved owners can create/publish studios, add or hide treatments/professionals, assign treatments to professionals, add dated availability, and view/cancel upcoming appointments in `/business`.
+- Customers can choose a treatment, date, professional and time, confirm a pay-at-studio appointment, and cancel before it starts. `/book/[serviceId]` requires sign-in and shows only available slots.
+- Database-enforced overlap exclusion, server-set price/duration snapshots, stale-price checks, idempotent retries, a 30-minute lead time, 90-day booking horizon, and 10-upcoming-appointment customer limit. Direct appointment table writes remain revoked.
 
 ## Scope and limitations
 
-This is the foundation, not a completed booking marketplace. Scheduling, availability, overlap-safe appointment creation, cancellation, payments, notifications, owner onboarding UI, password recovery, and account deletion are future work. Appointment writes are deliberately denied to API clients until a transactional scheduling API exists. Do not enable write grants alone.
+This is an initial booking release, not a completed marketplace. Online payments, notifications, business approval/onboarding, password recovery, account deletion, recurring schedules, rescheduling, refunds and cancellation-fee rules remain future work. Payment is due at the studio; no charge is taken online. Cancellation is allowed until the appointment starts. Availability uses dated windows, not recurring weekly rules.
+
+Appointment table writes remain denied to API clients. The only mutation boundary is the authenticated booking/cancellation API, which validates identity, ownership/publication, assignments, current price and duration, and availability in the database. Privileged helpers live in the non-exposed `booking_private` schema with an empty search path, explicit execute grants, and identity checks. Public wrappers run as the caller. Staff row locks serialize booking/cancellation/window removal; an exclusion constraint independently rejects overlapping confirmed reservations. Do not grant direct appointment writes.
 
 The three fictional preview studios are shown only when the catalog is empty or Supabase is not configured. Preview records are visibly labeled and cannot be booked. No sample studios or customers are permanently seeded into Supabase. The three preview slugs are reserved by a database constraint to avoid collisions.
 
@@ -33,7 +38,7 @@ Only a publishable key is required. Never add a service-role key, database passw
 
 ## Supabase migrations
 
-`supabase/migrations` matches the two migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
+`supabase/migrations` matches the four migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
 
 Businesses are provisioned by a trusted operator after approval. Customers cannot create businesses or change their ownership. Profiles can be created/updated only by their own user; profile IDs are immutable through the Data API.
 
@@ -51,16 +56,23 @@ npm run test:e2e
 
 Browser tests use installed Edge locally. On Linux/CI, install Playwright Chromium and set `PLAYWRIGHT_CHANNEL=chromium`. The CI preview-mode tests need no credentials. The authenticated browser test requires `BLOOM_TEST_EMAIL` and `BLOOM_TEST_PASSWORD` for a disposable confirmed account and otherwise skips. Do not use real customer credentials or commit test credentials. Test traces are disabled to avoid capturing sessions.
 
+The optional booking browser test additionally needs `BLOOM_OWNER_EMAIL` and an operator-provisioned disposable business. It creates studios/treatments/professionals/availability through the UI, books as a customer, checks reserved times disappear, rejects removal of a window with bookings, cancels, and verifies the time is released. Run these fixture tests separately from preview-catalog tests. Remove all disposable data afterward.
+
+`tests/integration/booking-concurrency.mjs` races six authenticated API calls for one slot, requires exactly one success and five overlap rejections, retries the winning request without duplication, then cancels. It needs `BLOOM_OTHER_EMAIL` plus the disposable browser-test setup and a seven-slot availability window three days ahead. Run with Node's `--env-file=.env.local --env-file=.env.test.local`; never use real customer accounts.
+
 `tests/db/rls.sql` creates transactional fixtures, asserts anonymous/customer/owner isolation, checks reassignment denial and fail-closed appointment writes, and rolls back. It was executed successfully on the designated Supabase project. `tests/db/bootstrap.sql` is only a minimal Supabase role shim for an isolated plain Postgres CI container; never run that shim on Supabase.
+
+`tests/db/booking.sql` adds transactional assertions for valid booking, retry idempotency, forged price/duration rejection, assignment checks, booking horizon and slot alignment, overlap/adjacent reservations, cross-customer cancellation denial, cancellation release, and protected availability removal. CI runs both SQL suites in isolated Postgres.
 
 Runtime dependency audit: zero vulnerabilities at verification. Full audit: five high-severity dependency-chain entries from the same unpatched `braces` advisory, GHSA-vfj7-8cjw-p6xm, via Next's ESLint tooling. These affect developer glob processing, not the deployed application runtime. No safe patched version was available; npm's suggested forced fix downgrades Next lint tooling across major versions. Review dependency advisories before release and do not lint untrusted glob patterns.
 
-Supabase security advisor: zero findings. Performance advisor: only informational unused indexes on the new empty catalog; retain these ownership/foreign-key lookup indexes as real traffic begins.
+Latest Supabase advisor results: no database/RLS/function security findings and no performance findings. One Auth setting warning remains: leaked-password protection is disabled. Review [Supabase password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) before launch; no account plan or authentication settings were changed during this implementation.
 
 ## UX references
 
 - [Fresha treatment discovery on Mobbin](https://mobbin.com/screens/0b68f8e9-3c79-4302-83c6-990eefc611d7)
 - [Fresha location search on Mobbin](https://mobbin.com/screens/07f1acb1-7f36-499f-8411-8c9a2f31bb3d)
 - [Fresha nearby venues on Mobbin](https://mobbin.com/screens/c3bc9536-c28c-4cf5-bb25-bca324c344c8)
+- [Fresha time selection on Mobbin](https://mobbin.com/screens/9b43fe75-dae4-4265-88f0-11d5203e3d14)
 
 The illustrations are original CSS artwork; no Mobbin screenshots or third-party brand assets ship with this project.

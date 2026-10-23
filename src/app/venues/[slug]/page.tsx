@@ -58,6 +58,11 @@ export default async function VenuePage({
                       currency: s.currency,
                     }).format(s.price_minor / 100)}
                   </strong>
+                  {!venue.is_demo && (
+                    <Link className="button secondary" href={`/book/${s.id}`}>
+                      Choose time
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -74,12 +79,18 @@ export default async function VenuePage({
           <p>
             {venue.is_demo
               ? "You’re exploring a preview. Create an account to have your personal space ready."
-              : "Online scheduling is coming soon. Explore treatments and create your account today."}
+              : "Choose a treatment to find an available time. Confirm your appointment online and pay at the studio."}
           </p>
-          <Link className="button" href="/login?mode=signup">
-            Create your account ↗
-          </Link>
-          <span>No appointment will be created.</span>
+          {venue.is_demo && (
+            <Link className="button" href="/login?mode=signup">
+              Create your account ↗
+            </Link>
+          )}
+          <span>
+            {venue.is_demo
+              ? "No appointment will be created."
+              : "All appointment times use Tbilisi (UTC+4)."}
+          </span>
         </aside>
       </div>
     </main>

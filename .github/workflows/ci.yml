@@ -41,3 +41,4 @@ jobs:
           docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/bootstrap.sql
           for file in supabase/migrations/*.sql; do docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < "$file"; done
           docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/rls.sql
+          docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/booking.sql

@@ -22,6 +22,7 @@ export type Database = {
           ends_at: string;
           id: string;
           price_minor: number;
+          request_id: string | null;
           service_id: string;
           service_name: string;
           staff_id: string;
@@ -36,6 +37,7 @@ export type Database = {
           ends_at: string;
           id?: string;
           price_minor: number;
+          request_id?: string | null;
           service_id: string;
           service_name: string;
           staff_id: string;
@@ -50,6 +52,7 @@ export type Database = {
           ends_at?: string;
           id?: string;
           price_minor?: number;
+          request_id?: string | null;
           service_id?: string;
           service_name?: string;
           staff_id?: string;
@@ -78,6 +81,38 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "venues";
             referencedColumns: ["id"];
+          },
+        ];
+      };
+      availability: {
+        Row: {
+          ends_at: string;
+          id: string;
+          staff_id: string;
+          starts_at: string;
+          venue_id: string;
+        };
+        Insert: {
+          ends_at: string;
+          id?: string;
+          staff_id: string;
+          starts_at: string;
+          venue_id: string;
+        };
+        Update: {
+          ends_at?: string;
+          id?: string;
+          staff_id?: string;
+          starts_at?: string;
+          venue_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "availability_staff_id_venue_id_fkey";
+            columns: ["staff_id", "venue_id"];
+            isOneToOne: false;
+            referencedRelation: "staff";
+            referencedColumns: ["id", "venue_id"];
           },
         ];
       };
@@ -187,6 +222,46 @@ export type Database = {
           },
         ];
       };
+      staff_services: {
+        Row: {
+          service_id: string;
+          staff_id: string;
+          venue_id: string;
+        };
+        Insert: {
+          service_id: string;
+          staff_id: string;
+          venue_id: string;
+        };
+        Update: {
+          service_id?: string;
+          staff_id?: string;
+          venue_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "staff_services_service_id_venue_id_fkey";
+            columns: ["service_id", "venue_id"];
+            isOneToOne: false;
+            referencedRelation: "services";
+            referencedColumns: ["id", "venue_id"];
+          },
+          {
+            foreignKeyName: "staff_services_staff_id_venue_id_fkey";
+            columns: ["staff_id", "venue_id"];
+            isOneToOne: false;
+            referencedRelation: "staff";
+            referencedColumns: ["id", "venue_id"];
+          },
+          {
+            foreignKeyName: "staff_services_venue_id_fkey";
+            columns: ["venue_id"];
+            isOneToOne: false;
+            referencedRelation: "venues";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       venues: {
         Row: {
           business_id: string;
@@ -245,7 +320,31 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      book_appointment: {
+        Args: {
+          p_expected_duration: number;
+          p_expected_price: number;
+          p_request_id: string;
+          p_service_id: string;
+          p_staff_id: string;
+          p_starts_at: string;
+        };
+        Returns: string;
+      };
+      cancel_appointment: {
+        Args: { p_appointment_id: string };
+        Returns: undefined;
+      };
+      list_booking_slots: {
+        Args: { p_day: string; p_service_id: string };
+        Returns: {
+          ends_at: string;
+          staff_id: string;
+          staff_name: string;
+          starts_at: string;
+        }[];
+      };
+      remove_availability: { Args: { p_id: string }; Returns: undefined };
     };
     Enums: {
       [_ in never]: never;

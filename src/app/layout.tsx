@@ -37,6 +37,7 @@ export default function RootLayout({
             <span>✳</span> bloom.
           </Link>
           <p>A little time. A good feeling. A little more you.</p>
+          <Link href="/business">For business ↗</Link>
           <span>Beauty & wellness, thoughtfully found.</span>
         </footer>
       </body>
