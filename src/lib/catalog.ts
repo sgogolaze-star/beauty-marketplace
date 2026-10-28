@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "./supabase/server";
 import { hasSupabase } from "./supabase/env";
+import type { PublicProvider } from "@/components/provider-disclosure";
 export const categories = [
   "All treatments",
   "Hair",
@@ -18,6 +19,7 @@ export type Venue = {
   category: string;
   description: string;
   is_demo: boolean;
+  service_address?: string;
 };
 export type Service = {
   id: string;
@@ -96,24 +98,49 @@ export async function getCatalog(): Promise<{
 }
 export async function getVenue(
   slug: string,
-): Promise<{ venue: Venue; services: Service[]; failed: boolean } | null> {
+): Promise<{
+  venue: Venue;
+  services: Service[];
+  provider: PublicProvider | null;
+  failed: boolean;
+} | null> {
   const preview = previewVenues.find((v) => v.slug === slug);
-  if (preview) return { venue: preview, services: [], failed: false };
+  if (preview)
+    return { venue: preview, services: [], provider: null, failed: false };
   if (!hasSupabase()) return null;
   const supabase = await createClient();
   const { data: venue, error } = await supabase
     .from("venues")
-    .select("id,slug,name,city,neighborhood,category,description,is_demo")
+    .select(
+      "id,slug,name,city,neighborhood,category,description,is_demo,business_id,service_address",
+    )
     .eq("slug", slug)
     .eq("published", true)
     .maybeSingle();
   if (error) throw new Error("Unable to load studio.");
   if (!venue) return null;
-  const { data: services, error: serviceError } = await supabase
-    .from("services")
-    .select("id,name,duration_minutes,price_minor,currency")
-    .eq("venue_id", venue.id)
-    .eq("active", true)
-    .order("name");
-  return { venue, services: services ?? [], failed: Boolean(serviceError) };
+  const [
+    { data: services, error: serviceError },
+    { data: provider, error: providerError },
+  ] = await Promise.all([
+    supabase
+      .from("services")
+      .select("id,name,duration_minutes,price_minor,currency")
+      .eq("venue_id", venue.id)
+      .eq("active", true)
+      .order("name"),
+    supabase
+      .from("provider_public_profiles")
+      .select(
+        "legal_name,operating_status,company_code,contact_email,contact_phone,contact_address,ready",
+      )
+      .eq("business_id", venue.business_id)
+      .maybeSingle(),
+  ]);
+  return {
+    venue,
+    services: provider?.ready ? (services ?? []) : [],
+    provider,
+    failed: Boolean(serviceError || providerError || !provider?.ready),
+  };
 }

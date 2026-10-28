@@ -45,3 +45,4 @@ jobs:
           docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/providers.sql
           docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/legal.sql
           docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/recovery.sql
+          docker exec -i foundation-db psql -U postgres -v ON_ERROR_STOP=1 < tests/db/disclosures.sql

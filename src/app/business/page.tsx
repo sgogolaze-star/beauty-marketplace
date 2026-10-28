@@ -7,9 +7,12 @@ import { money } from "@/lib/booking-validation";
 import { manageBusiness } from "./actions";
 import { SubmitButton } from "@/components/submit-button";
 import { CancelAppointment } from "@/components/cancel-appointment";
+import { operatingLabels } from "@/lib/provider-public";
 export const dynamic = "force-dynamic";
 const notices: Record<string, string> = {
   saved: "Your changes are saved.",
+  disclosure:
+    "Add your public provider contact details and studio service location before publishing.",
   access: "This action requires an approved business you own.",
   invalid:
     "We couldn’t save that change. Check the fields, time range, and selected studio.",
@@ -75,13 +78,21 @@ export default async function Business({
     );
   const { data: venues, error: venueError } = await supabase
     .from("venues")
-    .select("id,name,slug,published,business_id")
+    .select("id,name,slug,published,business_id,service_address")
     .in(
       "business_id",
       businesses.map((b) => b.id),
     )
     .order("name");
   if (venueError) throw new Error("Unable to load studios");
+  const { data: publicProfiles, error: profileError } = await supabase
+    .from("provider_public_profiles")
+    .select("*")
+    .in(
+      "business_id",
+      businesses.map((b) => b.id),
+    );
+  if (profileError) throw new Error("Unable to load provider contact details");
   const ids = venues?.map((v) => v.id) ?? [];
   const [
     serviceResult,
@@ -135,6 +146,90 @@ export default async function Business({
           {notices[query.notice]}
         </p>
       )}
+      {businesses.map((b) => {
+        const profile = publicProfiles?.find((p) => p.business_id === b.id);
+        return (
+          <section
+            className="workspace-panel"
+            key={b.id}
+            aria-label={`Public provider details for ${b.name}`}
+          >
+            <h2>Public provider details</h2>
+            <h3>{b.name}</h3>
+            <p>
+              Customers will see your approved legal identity and the contact
+              details you enter here when any of your studios is published. Your
+              private application address and phone are not copied here.
+            </p>
+            <p>
+              <strong>
+                {profile?.legal_name ?? "Legal identity needs review"}
+              </strong>{" "}
+              ·{" "}
+              {operatingLabels[profile?.operating_status ?? ""] ??
+                "Contact our review team in Supabase"}
+            </p>
+            {profile?.company_code && (
+              <p>Company registration code: {profile.company_code}</p>
+            )}
+            {(!profile?.legal_name ||
+              !profile.operating_status ||
+              (profile.operating_status === "company" &&
+                !profile.company_code)) && (
+              <p className="notice">
+                A reviewer must complete the approved legal identity in Supabase
+                before you can publish. Do not enter a personal identification
+                number.
+              </p>
+            )}
+            <form action={manageBusiness} className="stack">
+              <input type="hidden" name="operation" value="public_contact" />
+              <input type="hidden" name="business_id" value={b.id} />
+              <label>
+                Public contact email
+                <input
+                  type="email"
+                  name="contact_email"
+                  required
+                  maxLength={254}
+                  defaultValue={profile?.contact_email ?? ""}
+                />
+              </label>
+              <label>
+                Public contact phone
+                <input
+                  type="tel"
+                  name="contact_phone"
+                  required
+                  maxLength={25}
+                  defaultValue={profile?.contact_phone ?? ""}
+                />
+              </label>
+              <label>
+                Public contact address
+                <textarea
+                  name="contact_address"
+                  required
+                  minLength={5}
+                  maxLength={300}
+                  defaultValue={profile?.contact_address ?? ""}
+                />
+              </label>
+              <p className="form-note">
+                Use a business contact address you are comfortable publishing.
+                Do not enter a private home address unless it is also your
+                public business contact address.
+              </p>
+              <label className="declaration">
+                <input name="public_confirmed" type="checkbox" required />I
+                understand these contact details and my approved legal identity
+                will be public when I publish a studio.
+              </label>
+              <SubmitButton>Save public contact details</SubmitButton>
+            </form>
+          </section>
+        );
+      })}
       <details className="workspace-panel">
         <summary>Add a studio</summary>
         <form className="stack" action={manageBusiness}>
@@ -224,6 +319,26 @@ export default async function Business({
                 </button>
               </form>
             </div>
+            <form action={manageBusiness} className="stack location-form">
+              <Fields venue={v.id} operation="location" />
+              <label>
+                Public service location or area
+                <textarea
+                  name="service_address"
+                  required
+                  minLength={5}
+                  maxLength={300}
+                  defaultValue={v.service_address}
+                />
+              </label>
+              <p className="form-note">
+                For a studio, give the address customers should visit. For
+                mobile services, describe the area you cover and how the exact
+                location is agreed. This is shown on your listing and before
+                booking.
+              </p>
+              <SubmitButton>Save service location</SubmitButton>
+            </form>
             <div className="workspace-grid">
               <div>
                 <h3>Treatments</h3>

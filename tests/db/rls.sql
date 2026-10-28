@@ -8,10 +8,13 @@ insert into public.profiles(id,display_name) values
 insert into public.businesses(id,owner_id,name) values
 ('b1000000-0000-4000-8000-000000000001','a1000000-0000-4000-8000-000000000003','Fixture business A'),
 ('b1000000-0000-4000-8000-000000000002','a1000000-0000-4000-8000-000000000004','Fixture business B');
+insert into public.provider_public_profiles(business_id,legal_name,operating_status,contact_email,contact_phone,contact_address)
+select id,name,'individual','fixture@example.invalid','+995555000123','Fixture public address' from public.businesses where id in ('b1000000-0000-4000-8000-000000000001','b1000000-0000-4000-8000-000000000002');
 insert into public.venues(id,business_id,slug,name,city,category,published) values
-('c1000000-0000-4000-8000-000000000001','b1000000-0000-4000-8000-000000000001','fixture-public-a','Fixture A','Tbilisi','Hair',true),
+('c1000000-0000-4000-8000-000000000001','b1000000-0000-4000-8000-000000000001','fixture-public-a','Fixture A','Tbilisi','Hair',false),
 ('c1000000-0000-4000-8000-000000000002','b1000000-0000-4000-8000-000000000001','fixture-draft-a','Fixture Draft','Tbilisi','Hair',false),
-('c1000000-0000-4000-8000-000000000003','b1000000-0000-4000-8000-000000000002','fixture-public-b','Fixture B','Tbilisi','Nails',true);
+('c1000000-0000-4000-8000-000000000003','b1000000-0000-4000-8000-000000000002','fixture-public-b','Fixture B','Tbilisi','Nails',false);
+update public.venues set service_address='Fixture studio address',published=true where id in ('c1000000-0000-4000-8000-000000000001','c1000000-0000-4000-8000-000000000003');
 insert into public.services(id,venue_id,name,duration_minutes,price_minor,active) values
 ('d1000000-0000-4000-8000-000000000001','c1000000-0000-4000-8000-000000000001','Fixture active',30,2500,true),
 ('d1000000-0000-4000-8000-000000000002','c1000000-0000-4000-8000-000000000001','Fixture inactive',30,2500,false),

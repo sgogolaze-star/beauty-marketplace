@@ -1,21 +1,30 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect as baseExpect, type Page } from "@playwright/test";
 import { tbilisiDate } from "../../src/lib/booking-validation";
 import path from "node:path";
+import fs from "node:fs";
+const expect = baseExpect.configure({ timeout: 15000 });
 async function login(page: Page, email: string, password: string) {
   await page.goto("/login");
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel("Password", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(/\/account$/);
+  await expect(page).toHaveURL(/\/(account|onboarding)(\?.*)?$/);
 }
 test("owner setup → customer booking → cancellation releases availability", async ({
   page,
   browser,
 }, testInfo) => {
+  const journey = process.env.BLOOM_JOURNEY_FIXTURES
+    ? JSON.parse(fs.readFileSync(process.env.BLOOM_JOURNEY_FIXTURES, "utf8"))
+    : null;
+  const fixture = journey?.fixtures.find(
+    (f: { project: string }) => f.project === testInfo.project.name,
+  );
+  const ownerEmail = fixture?.providerEmail ?? process.env.BLOOM_OWNER_EMAIL;
+  const customerEmail = fixture?.customerEmail ?? process.env.BLOOM_TEST_EMAIL;
+  const password = journey?.password ?? process.env.BLOOM_TEST_PASSWORD;
   test.skip(
-    !process.env.BLOOM_OWNER_EMAIL ||
-      !process.env.BLOOM_TEST_EMAIL ||
-      !process.env.BLOOM_TEST_PASSWORD,
+    !ownerEmail || !customerEmail || !password,
     "Requires disposable owner/customer accounts and an operator-provisioned test business.",
   );
   test.setTimeout(90000);
@@ -23,9 +32,8 @@ test("owner setup → customer booking → cancellation releases availability", 
     studio = `Booking Studio ${suffix}`,
     treatment = `Care ritual ${suffix}`;
   const slug = `booking-e2e-${suffix}`;
-  const password = process.env.BLOOM_TEST_PASSWORD!;
   const day = tbilisiDate(new Date(new Date().getTime() + 2 * 86400000));
-  await login(page, process.env.BLOOM_OWNER_EMAIL!, password);
+  await login(page, ownerEmail!, password!);
   await page.goto("/business");
   await page.getByText("Add a studio", { exact: true }).click();
   const studioForm = page.locator("details.workspace-panel");
@@ -36,6 +44,39 @@ test("owner setup → customer booking → cancellation releases availability", 
     .locator("section.workspace-panel")
     .filter({ has: page.getByRole("heading", { name: studio, exact: true }) });
   await expect(panel).toBeVisible();
+  await panel.getByRole("button", { name: "Publish studio" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "public provider contact details",
+  );
+  const publicForm = page
+    .locator("section.workspace-panel")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Public provider details",
+        exact: true,
+      }),
+    });
+  await publicForm
+    .getByLabel("Public contact email")
+    .fill(`public-${suffix}@example.invalid`);
+  await publicForm.getByLabel("Public contact phone").fill("+995 555 222 333");
+  await publicForm
+    .getByLabel("Public contact address")
+    .fill("Public Business Street 20, Tbilisi");
+  await publicForm
+    .getByLabel("I understand these contact details", { exact: false })
+    .check();
+  await expect(publicForm.getByRole("checkbox")).toBeChecked();
+  expect(await publicForm.locator("form").evaluate(form => (form as HTMLFormElement).checkValidity())).toBe(true);
+  await publicForm
+    .getByRole("button", { name: "Save public contact details" })
+    .click();
+  await expect(page.getByRole("status")).toContainText("saved");
+  await panel
+    .getByLabel("Public service location or area")
+    .fill("Public Treatment Street 30, Tbilisi");
+  await panel.getByRole("button", { name: "Save service location" }).click();
+  await expect(page.getByRole("status")).toContainText("saved");
   await panel.getByRole("button", { name: "Publish studio" }).click();
   await expect(
     panel.getByRole("button", { name: "Unpublish studio" }),
@@ -88,10 +129,38 @@ test("owner setup → customer booking → cancellation releases availability", 
     reducedMotion: "reduce",
   });
   const cp = await customer.newPage();
-  await login(cp, process.env.BLOOM_TEST_EMAIL!, password);
+  await login(cp, customerEmail!, password!);
   await cp.goto(`/venues/${slug}`);
+  const disclosure = cp.getByRole("region", {
+    name: "Service provider details",
+  });
+  await expect(disclosure).toContainText("Public Business Street 20");
+  await expect(disclosure).toContainText("Public Treatment Street 30");
+  if (journey) {
+    await expect(disclosure).toContainText("Fixture Provider Legal Name");
+    await expect(
+      cp.getByText("Fixture Street 10, Tbilisi", { exact: true }),
+    ).toHaveCount(0);
+    if (suffix === "desktop")
+      await expect(disclosure).toContainText("123456789");
+    else
+      await expect(
+        disclosure.getByText("Company registration code", { exact: true }),
+      ).toHaveCount(0);
+  }
+  if (process.env.BLOOM_CAPTURE_DIR)
+    await cp.screenshot({
+      path: path.join(
+        process.env.BLOOM_CAPTURE_DIR,
+        `provider-listing-${suffix}.png`,
+      ),
+      fullPage: true,
+    });
   await cp.getByRole("link", { name: "Choose time" }).click();
   await expect(cp).toHaveURL(/\/book\/[0-9a-f-]+/);
+  await expect(
+    cp.getByRole("region", { name: "Service provider details" }),
+  ).toContainText(`public-${suffix}@example.invalid`);
   const bookingUrl = new URL(cp.url()).pathname;
   await cp.getByLabel("Appointment date").fill(day);
   await cp.getByRole("button", { name: "Show times" }).click();
@@ -140,5 +209,14 @@ test("owner setup → customer booking → cancellation releases availability", 
   await expect(
     cp.getByRole("heading", { name: "A different day, perhaps?" }),
   ).toBeVisible();
+  await page.goto("/business");
+  await panel.getByRole("button", { name: "Unpublish studio" }).click();
+  await expect(
+    panel.getByRole("button", { name: "Publish studio" }),
+  ).toBeVisible();
+  await cp.goto(`/venues/${slug}`);
+  await expect(cp.getByRole("heading", { name: "This space isn’t here." })).toBeVisible();
+  await expect(cp.getByRole("region", { name: "Service provider details" })).toHaveCount(0);
+  await expect(cp.getByRole("link", { name: "Choose time" })).toHaveCount(0);
   await customer.close();
 });

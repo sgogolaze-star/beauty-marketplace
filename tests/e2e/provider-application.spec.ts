@@ -68,6 +68,10 @@ test("provider submits an application and waits for review", async ({
     .getByLabel("Provider contact address", { exact: false })
     .fill("Fixture Street 10, Tbilisi");
   await page.getByLabel("Phone number").fill("+995 555 000 123");
+  if (f.kind === "business")
+    await page
+      .getByLabel("Company registration code", { exact: false })
+      .fill("123456789");
   await page.getByLabel("City", { exact: true }).fill("Tbilisi");
   await page
     .getByLabel("Workspace address or service area", { exact: false })

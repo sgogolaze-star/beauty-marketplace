@@ -206,8 +206,11 @@ export function ProviderForm({
       </label>
       <h2>3. Provider identity</h2>
       <p className="form-note">
-        This can differ from your public name. These details stay in your
-        private application for our review team.
+        This can differ from your studio or display name. Your legal provider
+        name, operating status and company registry code are used in public
+        provider details after approval. The contact address below stays
+        private; you choose a public contact address separately before
+        publishing.
       </p>
       <label>
         Operating status
@@ -261,7 +264,7 @@ export function ProviderForm({
         <input value="Georgia" readOnly autoComplete="country-name" />
       </label>
       <label hidden={operatingStatus !== "company"}>
-        Company registration code (optional)
+        Company registration code (required before publishing)
         <input
           disabled={operatingStatus !== "company"}
           name="registration_number"
@@ -303,7 +306,10 @@ export function ProviderForm({
       <p className="muted-small">
         Your application is private. Submission does not publish a listing or
         guarantee approval. Your account email is used for account access; this
-        form supports provider assessment. Our team’s decision and any rejection
+        form supports provider assessment. After approval, your legal provider
+        name, operating status and company registry code (if applicable) are
+        used in your public provider details. You choose public contacts
+        separately before publishing. Our team’s decision and any rejection
         reason will appear here.
       </p>
       <SubmitButton>

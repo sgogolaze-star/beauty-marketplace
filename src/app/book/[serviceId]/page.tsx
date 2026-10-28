@@ -13,6 +13,7 @@ import {
 } from "@/lib/booking-validation";
 import { bookAppointment } from "../actions";
 import { SubmitButton } from "@/components/submit-button";
+import { ProviderDisclosure } from "@/components/provider-disclosure";
 export const dynamic = "force-dynamic";
 const notices: Record<string, string> = {
   invalid: "Choose an available time to continue.",
@@ -51,12 +52,28 @@ export default async function Book({
   if (!service) notFound();
   const { data: venue, error: venueError } = await supabase
     .from("venues")
-    .select("name,slug,city,neighborhood,is_demo")
+    .select("name,slug,city,neighborhood,is_demo,business_id,service_address")
     .eq("id", service.venue_id)
     .eq("published", true)
     .maybeSingle();
   if (venueError) throw new Error("Unable to load studio");
   if (!venue || venue.is_demo) notFound();
+  const { data: provider, error: providerError } = await supabase
+    .from("provider_public_profiles")
+    .select(
+      "legal_name,operating_status,company_code,contact_email,contact_phone,contact_address,ready",
+    )
+    .eq("business_id", venue.business_id)
+    .maybeSingle();
+  if (providerError) throw new Error("Unable to load service provider");
+  if (!provider?.ready)
+    return (
+      <main className="page-shell">
+        <h1>Booking is unavailable.</h1>
+        <p>This provider needs to complete their public details.</p>
+        <Link href={`/venues/${venue.slug}`}>Back to studio</Link>
+      </main>
+    );
   const { data: slots, error } = await supabase.rpc("list_booking_slots", {
     p_service_id: serviceId,
     p_day: day,
@@ -167,6 +184,10 @@ export default async function Book({
             <strong>{money(service.price_minor, service.currency)}</strong>
           </div>
           <p>No charge online. Your time is reserved after confirmation.</p>
+          <ProviderDisclosure
+            provider={provider}
+            location={venue.service_address}
+          />
         </aside>
       </div>
     </main>

@@ -1,0 +1,17 @@
+# Public provider details
+
+Approval in Supabase creates a private draft studio and a `provider_public_profiles` row. The row contains the approved legal name, operating status and company registration code where applicable. Reviewers must check these facts before approving; the UI does not claim a licence or registry verification. An individual entrepreneur or individual provider is never asked for a personal ID number.
+
+Private application phone, contact address, qualifications and review notes are not copied into this public row. The provider chooses a public contact email, phone and contact address in `/business` and explicitly acknowledges their publication. The studio has a separate public service location or service area. Home/mobile providers must choose appropriate public business contact details and accurately describe where services are delivered.
+
+Customers see the provider identity and contacts on the studio page and on the booking page before confirming. They can email or call the provider directly. These are the service provider's contacts, not a substitute for the marketplace operator's own legal contacts.
+
+Database guards require complete public details and a service location before publication or new appointments. Incomplete contact details cannot replace complete details while a studio is published. Unpublish every studio for that business first if removing required details. Unpublishing hides the public profile from anonymous visitors and other users; the owner retains access. Existing booking cancellation remains available.
+
+Owners can update only the three public contact columns. They cannot insert profiles, change legal identity, change company codes, move a profile to another business or approve themselves. Public reads are protected by RLS and depend on a published studio. Listing publication locks the profile row to serialize concurrent contact changes. Guard functions live in an unexposed schema with no client execute grants.
+
+For an approved legacy application with incomplete identity, a trusted reviewer must complete `legal_name`, `operating_status` and, for a company, `company_code` in `provider_public_profiles` using Supabase. Do not copy a private address/phone automatically. This release has no applicant-facing legal identity amendment/re-review workflow. Creating businesses directly through SQL also requires a trusted public profile row; normal providers use application approval.
+
+`tests/db/disclosures.sql` verifies isolation, restricted column writes, publication/location requirements, removal guards and unpublication privacy. The optional booking browser test can use `BLOOM_JOURNEY_FIXTURES`, an ignored JSON file containing a random password and desktop/mobile provider/customer fixture emails. Use the provider application browser test first, review those disposable applications in Supabase, then run booking tests. No admin credential is given to the application or browser test. Cleanup must revoke/delete disposable sessions and remove appointments, availability, assignments, services, staff, studios, review/application records, businesses and fixture accounts in dependency order.
+
+This implements provider disclosures for the preview; it does not finalize Georgian contract wording, withdrawal/confirmation handling or the marketplace operator's identity. Legal policy drafts and the production build gate remain in place.

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getVenue } from "@/lib/catalog";
 import { StudioArt } from "@/components/studio-art";
+import { ProviderDisclosure } from "@/components/provider-disclosure";
 export const dynamic = "force-dynamic";
 export default async function VenuePage({
   params,
@@ -11,7 +12,7 @@ export default async function VenuePage({
   const { slug } = await params;
   const result = await getVenue(slug);
   if (!result) notFound();
-  const { venue, services, failed } = result;
+  const { venue, services, provider, failed } = result;
   return (
     <main className="page-shell">
       <Link className="back" href="/#discover">
@@ -39,6 +40,12 @@ export default async function VenuePage({
           <span className="eyebrow">A SPACE FOR YOU</span>
           <h2>Meet your next good feeling.</h2>
           <p className="description">{venue.description}</p>
+          {!venue.is_demo && (
+            <ProviderDisclosure
+              provider={provider}
+              location={venue.service_address ?? ""}
+            />
+          )}
           <h2>Treatments</h2>
           {failed ? (
             <p role="alert">

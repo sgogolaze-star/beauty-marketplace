@@ -2,7 +2,8 @@
 begin;
 insert into auth.users(id) values ('91000000-0000-4000-8000-000000000001'),('91000000-0000-4000-8000-000000000002'),('91000000-0000-4000-8000-000000000003'),('91000000-0000-4000-8000-000000000004');
 insert into public.businesses(id,owner_id,name) values ('92000000-0000-4000-8000-000000000001','91000000-0000-4000-8000-000000000003','Booking fixture business');
-insert into public.venues(id,business_id,slug,name,city,category,published) values ('93000000-0000-4000-8000-000000000001','92000000-0000-4000-8000-000000000001','booking-fixture','Booking fixture','Tbilisi','Hair',true);
+insert into public.provider_public_profiles(business_id,legal_name,operating_status,contact_email,contact_phone,contact_address) values ('92000000-0000-4000-8000-000000000001','Booking fixture provider','individual','fixture@example.invalid','+995555000123','Fixture public address');
+insert into public.venues(id,business_id,slug,name,city,category,published,service_address) values ('93000000-0000-4000-8000-000000000001','92000000-0000-4000-8000-000000000001','booking-fixture','Booking fixture','Tbilisi','Hair',true,'Fixture studio address');
 insert into public.services(id,venue_id,name,duration_minutes,price_minor,active) values ('94000000-0000-4000-8000-000000000001','93000000-0000-4000-8000-000000000001','Booking treatment',30,7500,true),('94000000-0000-4000-8000-000000000002','93000000-0000-4000-8000-000000000001','Unassigned treatment',30,8500,true);
 insert into public.staff(id,venue_id,display_name,active) values ('95000000-0000-4000-8000-000000000001','93000000-0000-4000-8000-000000000001','Booking professional',true);
 insert into public.staff_services values ('93000000-0000-4000-8000-000000000001','95000000-0000-4000-8000-000000000001','94000000-0000-4000-8000-000000000001');

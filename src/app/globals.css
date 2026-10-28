@@ -1677,3 +1677,11 @@ footer .legal-links {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.provider-disclosure { margin: 28px 0; overflow-wrap: anywhere; }
+.provider-disclosure dl { margin: 20px 0; }
+.provider-disclosure dt { font-size: 12px; color: #657169; margin-top: 14px; }
+.provider-disclosure dd { margin: 4px 0 0; line-height: 1.6; white-space: pre-line; }
+.provider-disclosure a { text-decoration: underline; text-underline-offset: 3px; }
+.location-form { max-width: 620px; margin: 24px 0 32px; }
+.declaration { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 10px; line-height: 1.6; }
+.declaration input { width: auto; margin-top: 5px; flex: 0 0 auto; }

@@ -6,7 +6,7 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 
 - Responsive discovery, treatment and city filters, studio details, useful empty/error states, and accessible account forms.
 - Supabase SSR email/password sign-in, sign-up, code exchange and email confirmation handlers, cookie refresh, verified server-side account access, and sign-out. Auth responses use private/no-store caching.
-- Twelve database tables: profiles, businesses, venues, services, staff, appointments, staff_services, availability, provider_applications, provider_application_reviews, legal_documents, and legal_receipts. Every table has RLS. Business ownership comes from trusted application approval, never editable signup metadata.
+- Thirteen public database tables: profiles, businesses, venues, services, staff, appointments, staff_services, availability, provider_applications, provider_application_reviews, legal_documents, legal_receipts and provider_public_profiles. Every table has RLS. Business ownership comes from trusted application approval, never editable signup metadata.
 - Published venues and active services/staff are public. Customers read their own appointments and profiles. Owners manage only their businesses' catalog and read their businesses' appointments.
 - Generated database types, exact dependency versions, lockfile, unit tests, browser tests, transactional RLS tests, and CI.
 - Approved owners can create/publish studios, add or hide treatments/professionals, assign treatments to professionals, add dated availability, and view/cancel upcoming appointments in `/business`.
@@ -23,6 +23,8 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 This is an initial booking release, not a completed marketplace. Online payments, notifications, an app-based administrator review screen, provider suspension, account deletion, recurring schedules, rescheduling, refunds and cancellation-fee rules remain future work. Provider decisions are handled in Supabase for now. Payment is due at the studio; no charge is taken online. Cancellation is allowed until the appointment starts. Availability uses dated windows, not recurring weekly rules.
 
 Password recovery uses Supabase PKCE with a verified recovery session, a 15-minute single-use database permission, password confirmation and sign-out after success. See [recovery flow, verification and email delivery limitations](docs/password-recovery.md). The Auth service and app flow were tested with disposable accounts; real inbox delivery remains unverified.
+
+Studio and booking pages display approved legal provider identity, owner-selected public contact details and the service location. Database guards prevent publication and new appointments without complete disclosures. Private application contacts are not copied automatically. See [provider disclosure behavior and review workflow](docs/provider-disclosures.md).
 
 Appointment table writes remain denied to API clients. The only mutation boundary is the authenticated booking/cancellation API, which validates identity, ownership/publication, assignments, current price and duration, and availability in the database. Privileged helpers live in the non-exposed `booking_private` schema with an empty search path, explicit execute grants, and identity checks. Public wrappers run as the caller. Staff row locks serialize booking/cancellation/window removal; an exclusion constraint independently rejects overlapping confirmed reservations. Do not grant direct appointment writes.
 
@@ -45,7 +47,7 @@ Only a publishable key is required. Never add a service-role key, database passw
 
 ## Supabase migrations
 
-`supabase/migrations` matches the ten migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
+`supabase/migrations` matches the eleven migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
 
 Businesses are provisioned automatically when a trusted operator approves a pending application in Supabase. Applicants cannot write review status or business ownership. The private trigger provisions records atomically; public submission runs through an authenticated wrapper and private identity-checked helper. Registration metadata is a navigation hint only. Applicants can read only their own application and review records. Profiles can be created/updated only by their own user; profile IDs are immutable through the Data API.
 

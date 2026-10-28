@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { localTimestamp, priceMinor, uuid } from "@/lib/booking-validation";
 import { categories } from "@/lib/catalog";
+import { publicContact } from "@/lib/provider-public";
 
 export async function manageBusiness(form: FormData) {
   const supabase = await createClient();
@@ -29,7 +30,18 @@ export async function manageBusiness(form: FormData) {
     .eq("owner_id", user.id);
   if (businessError || !businesses?.length) fail("access");
   const ids = businesses!.map((b) => b.id);
-  if (op === "venue") {
+  if (op === "public_contact") {
+    const business = get("business_id");
+    const contact = publicContact(form);
+    if (!ids.includes(business) || !contact) fail();
+    const { error } = await supabase
+      .from("provider_public_profiles")
+      .update(contact!)
+      .eq("business_id", business)
+      .select("business_id")
+      .single();
+    if (error) fail();
+  } else if (op === "venue") {
     const business = get("business_id"),
       slug = get("slug"),
       name = get("name"),
@@ -66,7 +78,17 @@ export async function manageBusiness(form: FormData) {
       .in("business_id", ids)
       .maybeSingle();
     if (!owned) fail("access");
-    if (op === "service") {
+    if (op === "location") {
+      const location = get("service_address");
+      if (location.length < 5 || location.length > 300) fail();
+      const { error } = await supabase
+        .from("venues")
+        .update({ service_address: location })
+        .eq("id", venue)
+        .select("id")
+        .single();
+      if (error) fail();
+    } else if (op === "service") {
       const price = priceMinor(get("price")),
         duration = Number(get("duration")),
         name = get("name");
@@ -137,7 +159,12 @@ export async function manageBusiness(form: FormData) {
         .eq("id", venue)
         .select("id")
         .single();
-      if (error) fail();
+      if (error)
+        fail(
+          error.message.includes("public_provider_details_required")
+            ? "disclosure"
+            : "invalid",
+        );
     } else if (op === "service_active" || op === "staff_active") {
       const id = get("id");
       if (!uuid.test(id)) fail();

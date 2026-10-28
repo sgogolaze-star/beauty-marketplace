@@ -350,6 +350,47 @@ export type Database = {
           },
         ];
       };
+      provider_public_profiles: {
+        Row: {
+          business_id: string;
+          company_code: string;
+          contact_address: string;
+          contact_email: string;
+          contact_phone: string;
+          legal_name: string | null;
+          operating_status: string | null;
+          ready: boolean | null;
+        };
+        Insert: {
+          business_id: string;
+          company_code?: string;
+          contact_address?: string;
+          contact_email?: string;
+          contact_phone?: string;
+          legal_name?: string | null;
+          operating_status?: string | null;
+          ready?: boolean | null;
+        };
+        Update: {
+          business_id?: string;
+          company_code?: string;
+          contact_address?: string;
+          contact_email?: string;
+          contact_phone?: string;
+          legal_name?: string | null;
+          operating_status?: string | null;
+          ready?: boolean | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "provider_public_profiles_business_id_fkey";
+            columns: ["business_id"];
+            isOneToOne: true;
+            referencedRelation: "businesses";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       services: {
         Row: {
           active: boolean;
@@ -469,6 +510,7 @@ export type Database = {
           name: string;
           neighborhood: string;
           published: boolean;
+          service_address: string;
           slug: string;
           timezone: string;
         };
@@ -483,6 +525,7 @@ export type Database = {
           name: string;
           neighborhood?: string;
           published?: boolean;
+          service_address?: string;
           slug: string;
           timezone?: string;
         };
@@ -497,6 +540,7 @@ export type Database = {
           name?: string;
           neighborhood?: string;
           published?: boolean;
+          service_address?: string;
           slug?: string;
           timezone?: string;
         };
