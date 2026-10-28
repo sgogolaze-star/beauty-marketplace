@@ -20,7 +20,9 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 
 ## Scope and limitations
 
-This is an initial booking release, not a completed marketplace. Online payments, notifications, an app-based administrator review screen, provider suspension, password recovery, account deletion, recurring schedules, rescheduling, refunds and cancellation-fee rules remain future work. Provider decisions are handled in Supabase for now. Payment is due at the studio; no charge is taken online. Cancellation is allowed until the appointment starts. Availability uses dated windows, not recurring weekly rules.
+This is an initial booking release, not a completed marketplace. Online payments, notifications, an app-based administrator review screen, provider suspension, account deletion, recurring schedules, rescheduling, refunds and cancellation-fee rules remain future work. Provider decisions are handled in Supabase for now. Payment is due at the studio; no charge is taken online. Cancellation is allowed until the appointment starts. Availability uses dated windows, not recurring weekly rules.
+
+Password recovery uses Supabase PKCE with a verified recovery session, a 15-minute single-use database permission, password confirmation and sign-out after success. See [recovery flow, verification and email delivery limitations](docs/password-recovery.md). The Auth service and app flow were tested with disposable accounts; real inbox delivery remains unverified.
 
 Appointment table writes remain denied to API clients. The only mutation boundary is the authenticated booking/cancellation API, which validates identity, ownership/publication, assignments, current price and duration, and availability in the database. Privileged helpers live in the non-exposed `booking_private` schema with an empty search path, explicit execute grants, and identity checks. Public wrappers run as the caller. Staff row locks serialize booking/cancellation/window removal; an exclusion constraint independently rejects overlapping confirmed reservations. Do not grant direct appointment writes.
 
@@ -43,7 +45,7 @@ Only a publishable key is required. Never add a service-role key, database passw
 
 ## Supabase migrations
 
-`supabase/migrations` matches the nine migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
+`supabase/migrations` matches the ten migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
 
 Businesses are provisioned automatically when a trusted operator approves a pending application in Supabase. Applicants cannot write review status or business ownership. The private trigger provisions records atomically; public submission runs through an authenticated wrapper and private identity-checked helper. Registration metadata is a navigation hint only. Applicants can read only their own application and review records. Profiles can be created/updated only by their own user; profile IDs are immutable through the Data API.
 
@@ -73,7 +75,7 @@ The optional booking browser test additionally needs `BLOOM_OWNER_EMAIL` and an 
 
 Runtime dependency audit: zero vulnerabilities at verification. Full audit: five high-severity dependency-chain entries from the same unpatched `braces` advisory, GHSA-vfj7-8cjw-p6xm, via Next's ESLint tooling. These affect developer glob processing, not the deployed application runtime. No safe patched version was available; npm's suggested forced fix downgrades Next lint tooling across major versions. Review dependency advisories before release and do not lint untrusted glob patterns.
 
-Latest Supabase advisor results: no database/RLS/function security findings and no performance findings. One Auth setting warning remains: leaked-password protection is disabled. Review [Supabase password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) before launch; no account plan or authentication settings were changed during this implementation.
+Latest Supabase advisor results: no performance findings. An informational no-policy notice for the deliberately inaccessible `recovery_private.used_sessions` table is expected. One Auth setting warning remains: leaked-password protection is disabled. Review [Supabase password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection) before launch; no account plan or authentication settings were changed during this implementation.
 
 ## UX references
 

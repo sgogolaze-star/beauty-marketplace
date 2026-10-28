@@ -530,6 +530,7 @@ export type Database = {
         Args: { p_appointment_id: string };
         Returns: undefined;
       };
+      consume_password_recovery: { Args: never; Returns: undefined };
       list_booking_slots: {
         Args: { p_day: string; p_service_id: string };
         Returns: {
@@ -539,6 +540,7 @@ export type Database = {
           starts_at: string;
         }[];
       };
+      password_recovery_status: { Args: never; Returns: boolean };
       record_legal_receipts: {
         Args: {
           p_hashes: Json;

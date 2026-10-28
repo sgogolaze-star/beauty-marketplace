@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/supabase/env";
 import { credentials, safeNext } from "@/lib/auth-validation";
+import { authOrigin } from "@/lib/auth-origin";
 import {
   registrationType,
   registrationDestination,
@@ -27,9 +28,20 @@ export async function authenticate(form: FormData) {
     const fullName = String(form.get("full_name") ?? "").trim();
     if (fullName.length < 2 || fullName.length > 100)
       fail("Enter your name using 2 to 100 characters.");
+    let origin: string;
+    try {
+      origin = await authOrigin();
+    } catch {
+      fail(
+        "Account email links are not configured yet. Please try again later.",
+      );
+    }
     const { data, error } = await supabase.auth.signUp({
       ...input!,
-      options: { data: { registration_kind: kind, full_name: fullName } },
+      options: {
+        emailRedirectTo: `${origin!}/auth/callback?next=${encodeURIComponent(next)}`,
+        data: { registration_kind: kind, full_name: fullName },
+      },
     });
     if (error)
       fail("We could not create your account. Please try again later.");

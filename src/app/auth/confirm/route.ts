@@ -2,14 +2,19 @@ import { agreementDestination } from "@/lib/legal-server";
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { registrationDestination } from "@/lib/provider-validation";
+import { hasSupabase } from "@/lib/supabase/env";
 export async function GET(request: NextRequest) {
   const token_hash = request.nextUrl.searchParams.get("token_hash");
   const type = request.nextUrl.searchParams.get("type");
-  if (token_hash && type === "email") {
+  if (
+    token_hash &&
+    type === "email" &&
+    hasSupabase()
+  ) {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({
       token_hash,
-      type: "email",
+      type,
     });
     if (!error) {
       const {
@@ -30,6 +35,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(target, request.url));
     }
   }
+  if (type === "recovery")
+    return NextResponse.redirect(
+      new URL("/forgot-password?notice=expired", request.url),
+    );
   return NextResponse.redirect(
     new URL(
       "/login?message=This%20confirmation%20link%20has%20expired%20or%20is%20invalid.",

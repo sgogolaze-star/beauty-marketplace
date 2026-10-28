@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { authenticate } from "@/app/auth/actions";
 import { SubmitButton } from "@/components/submit-button";
 import { AccountTypeSelector } from "@/components/account-type-selector";
@@ -81,6 +82,11 @@ export function AuthForm({
         </p>
       )}
       {signup && <LegalLinks />}
+      {!signup && (
+        <Link className="forgot-link" href="/forgot-password">
+          Forgot password?
+        </Link>
+      )}
       <SubmitButton>
         {signup
           ? kind === "customer"

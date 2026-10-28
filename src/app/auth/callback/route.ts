@@ -3,12 +3,32 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth-validation";
 import { registrationDestination } from "@/lib/provider-validation";
+import { hasSupabase } from "@/lib/supabase/env";
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
-  if (code) {
+  const recoveryRequested =
+    request.nextUrl.searchParams.get("flow") === "recovery";
+  if (code && hasSupabase()) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const flowId = request.nextUrl.searchParams.get("sb_flow_id");
+    const { error } = await supabase.auth.exchangeCodeForSession(
+      code,
+      flowId === null ? undefined : { flowId },
+    );
     if (!error) {
+      const { data: eligible, error: recoveryError } = await supabase.rpc(
+        "password_recovery_status",
+      );
+      if (recoveryRequested || (!recoveryError && eligible)) {
+        return NextResponse.redirect(
+          new URL(
+            !recoveryError && eligible
+              ? "/reset-password"
+              : "/forgot-password?notice=expired",
+            request.url,
+          ),
+        );
+      }
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -28,6 +48,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL(target, request.url));
     }
   }
+  if (recoveryRequested)
+    return NextResponse.redirect(
+      new URL("/forgot-password?notice=expired", request.url),
+    );
   return NextResponse.redirect(
     new URL(
       "/login?message=This%20confirmation%20link%20could%20not%20be%20verified.",

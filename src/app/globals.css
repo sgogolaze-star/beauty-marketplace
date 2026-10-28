@@ -1651,3 +1651,29 @@ footer .legal-links {
   width: auto;
   margin-top: 7px;
 }
+
+.recovery-wrap {
+  padding: 50px 6% 70px;
+  min-height: 65vh;
+}
+.recovery-card {
+  max-width: 490px;
+  margin: 0 auto;
+}
+.recovery-card h1 {
+  font-size: clamp(30px, 6vw, 42px);
+  line-height: 1.25;
+  margin: 20px 0;
+}
+.recovery-card > .button {
+  margin-top: 16px;
+}
+.recovery-card .form-note {
+  margin-top: 24px;
+}
+.forgot-link {
+  font-size: 12px;
+  text-align: right;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
