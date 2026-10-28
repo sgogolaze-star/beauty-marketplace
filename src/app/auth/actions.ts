@@ -1,4 +1,5 @@
 "use server";
+import { agreementDestination } from "@/lib/legal-server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/supabase/env";
@@ -34,7 +35,15 @@ export async function authenticate(form: FormData) {
       fail("We could not create your account. Please try again later.");
     if (!data.session)
       fail("Check your email to confirm your account, then sign in.");
-    redirect(registrationDestination(kind, next));
+    const destination = registrationDestination(kind, next);
+    redirect(
+      await agreementDestination(
+        supabase,
+        data.user!.id,
+        destination,
+        kind !== "customer",
+      ),
+    );
   } else {
     const { data, error } = await supabase.auth.signInWithPassword(input!);
     if (error)

@@ -1,3 +1,4 @@
+import { agreementDestination } from "@/lib/legal-server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -17,6 +18,13 @@ export default async function Onboarding({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fonboarding");
+  const legalNext = await agreementDestination(
+    supabase,
+    user.id,
+    "/onboarding",
+    true,
+  );
+  if (legalNext !== "/onboarding") redirect(legalNext);
   const [applicationResult, businessResult] = await Promise.all([
     supabase
       .from("provider_applications")

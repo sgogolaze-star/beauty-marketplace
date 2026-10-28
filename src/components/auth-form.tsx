@@ -4,6 +4,7 @@ import { authenticate } from "@/app/auth/actions";
 import { SubmitButton } from "@/components/submit-button";
 import { AccountTypeSelector } from "@/components/account-type-selector";
 import type { RegistrationType } from "@/lib/provider-validation";
+import { LegalLinks } from "@/components/legal-links";
 
 export function AuthForm({
   signup,
@@ -79,6 +80,7 @@ export function AuthForm({
           Never enter identity documents or payment details here.
         </p>
       )}
+      {signup && <LegalLinks />}
       <SubmitButton>
         {signup
           ? kind === "customer"

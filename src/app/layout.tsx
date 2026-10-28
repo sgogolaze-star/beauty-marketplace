@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LegalLinks } from "@/components/legal-links";
 import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "Bloom — A little more you", template: "%s · Bloom" },
@@ -45,6 +46,7 @@ export default function RootLayout({
           <Link href="/account">My appointments</Link>
           <Link href="/business">For business ↗</Link>
           <span>Beauty & wellness, thoughtfully found.</span>
+          <LegalLinks />
         </footer>
       </body>
     </html>

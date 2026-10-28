@@ -1,4 +1,5 @@
 "use server";
+import { agreementDestination } from "@/lib/legal-server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -12,6 +13,13 @@ export async function bookAppointment(form: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/book/${service}`)}`);
+  const legalNext = await agreementDestination(
+    supabase,
+    user.id,
+    `/book/${service}`,
+    false,
+  );
+  if (legalNext !== `/book/${service}`) redirect(legalNext);
   const [staff, start] = String(form.get("slot") ?? "").split("|");
   const request = String(form.get("request_id") ?? "");
   const price = Number(form.get("price_minor"));

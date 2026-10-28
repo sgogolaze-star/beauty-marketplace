@@ -1,3 +1,4 @@
+import { agreementDestination } from "@/lib/legal-server";
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { safeNext } from "@/lib/auth-validation";
@@ -11,15 +12,20 @@ export async function GET(request: NextRequest) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      return NextResponse.redirect(
-        new URL(
-          registrationDestination(
-            user?.user_metadata?.registration_kind,
-            safeNext(request.nextUrl.searchParams.get("next")),
-          ),
-          request.url,
-        ),
+      const destination = registrationDestination(
+        user?.user_metadata?.registration_kind,
+        safeNext(request.nextUrl.searchParams.get("next")),
       );
+      const target = user
+        ? await agreementDestination(
+            supabase,
+            user.id,
+            destination,
+            user.user_metadata?.registration_kind === "business" ||
+              user.user_metadata?.registration_kind === "professional",
+          )
+        : destination;
+      return NextResponse.redirect(new URL(target, request.url));
     }
   }
   return NextResponse.redirect(

@@ -6,7 +6,7 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 
 - Responsive discovery, treatment and city filters, studio details, useful empty/error states, and accessible account forms.
 - Supabase SSR email/password sign-in, sign-up, code exchange and email confirmation handlers, cookie refresh, verified server-side account access, and sign-out. Auth responses use private/no-store caching.
-- Ten database tables: profiles, businesses, venues, services, staff, appointments, staff_services, availability, provider_applications, and provider_application_reviews. Every table has RLS. Business ownership comes from trusted application approval, never editable signup metadata.
+- Twelve database tables: profiles, businesses, venues, services, staff, appointments, staff_services, availability, provider_applications, provider_application_reviews, legal_documents, and legal_receipts. Every table has RLS. Business ownership comes from trusted application approval, never editable signup metadata.
 - Published venues and active services/staff are public. Customers read their own appointments and profiles. Owners manage only their businesses' catalog and read their businesses' appointments.
 - Generated database types, exact dependency versions, lockfile, unit tests, browser tests, transactional RLS tests, and CI.
 - Approved owners can create/publish studios, add or hide treatments/professionals, assign treatments to professionals, add dated availability, and view/cancel upcoming appointments in `/business`.
@@ -15,6 +15,8 @@ An initial Next.js App Router foundation for a beauty and wellness marketplace. 
 - Adjacent Sign in / Sign up entry points and keyboard-accessible segmented account choices preserve entered details. Signup collects name/email/password; providers complete private contact, services and legal identity sections for the Georgia launch, with server-recorded declarations. See [registration research and remaining legal launch requirements](docs/registration-research.md).
 - Registration offers Customer, Business, and Individual professional paths. Providers complete a private application after account confirmation/sign-in. Customers do not need team approval.
 - Provider applications are reviewed in Supabase Table Editor. Approval automatically provisions an owner workspace and private draft studio; individual professionals also receive a professional profile. Rejections require a reason and allow resubmission. Pending details are locked during review. See [provider review guide](docs/provider-review.md).
+
+- Georgian/English Terms, Privacy and Provider Agreement drafts are linked from signup/footer. Versioned, private legal receipts and immutable policy snapshots are implemented, with current-policy checks at the database mutation boundary. Drafts cannot be accepted. A production build guard blocks incomplete operator identity and draft publication. See [policy release state and activation guide](docs/legal-release.md).
 
 ## Scope and limitations
 
@@ -41,7 +43,7 @@ Only a publishable key is required. Never add a service-role key, database passw
 
 ## Supabase migrations
 
-`supabase/migrations` matches the seven migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
+`supabase/migrations` matches the nine migrations applied to the designated project. Use these files to initialize an empty environment; do not reapply them manually to an already migrated database. CLI migration generation was verified with Supabase CLI 2.81.3. The hosted migration history remains the source of truth for applied versions.
 
 Businesses are provisioned automatically when a trusted operator approves a pending application in Supabase. Applicants cannot write review status or business ownership. The private trigger provisions records atomically; public submission runs through an authenticated wrapper and private identity-checked helper. Registration metadata is a navigation hint only. Applicants can read only their own application and review records. Profiles can be created/updated only by their own user; profile IDs are immutable through the Data API.
 

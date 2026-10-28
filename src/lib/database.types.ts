@@ -140,6 +140,68 @@ export type Database = {
         };
         Relationships: [];
       };
+      legal_documents: {
+        Row: {
+          content_json: string;
+          content_sha256: string;
+          kind: string;
+          published_at: string | null;
+          status: string;
+          version: string;
+        };
+        Insert: {
+          content_json: string;
+          content_sha256: string;
+          kind: string;
+          published_at?: string | null;
+          status?: string;
+          version: string;
+        };
+        Update: {
+          content_json?: string;
+          content_sha256?: string;
+          kind?: string;
+          published_at?: string | null;
+          status?: string;
+          version?: string;
+        };
+        Relationships: [];
+      };
+      legal_receipts: {
+        Row: {
+          action: string;
+          kind: string;
+          locale: string;
+          recorded_at: string;
+          user_id: string;
+          version: string;
+        };
+        Insert: {
+          action: string;
+          kind: string;
+          locale: string;
+          recorded_at?: string;
+          user_id: string;
+          version: string;
+        };
+        Update: {
+          action?: string;
+          kind?: string;
+          locale?: string;
+          recorded_at?: string;
+          user_id?: string;
+          version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "legal_receipts_kind_version_fkey";
+            columns: ["kind", "version"];
+            isOneToOne: false;
+            referencedRelation: "legal_documents";
+            referencedColumns: ["kind", "version"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -476,6 +538,15 @@ export type Database = {
           staff_name: string;
           starts_at: string;
         }[];
+      };
+      record_legal_receipts: {
+        Args: {
+          p_hashes: Json;
+          p_locale: string;
+          p_provider: boolean;
+          p_versions: Json;
+        };
+        Returns: undefined;
       };
       remove_availability: { Args: { p_id: string }; Returns: undefined };
       submit_provider_application: {

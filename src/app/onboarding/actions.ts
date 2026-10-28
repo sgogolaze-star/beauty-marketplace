@@ -1,4 +1,5 @@
 "use server";
+import { agreementDestination } from "@/lib/legal-server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -17,6 +18,13 @@ export async function submitApplication(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fonboarding");
+  const legalNext = await agreementDestination(
+    supabase,
+    user.id,
+    "/onboarding",
+    true,
+  );
+  if (legalNext !== "/onboarding") redirect(legalNext);
   const details = providerDetails(form);
   const fail = (error: string): ApplicationFormState => ({
     error,

@@ -1,3 +1,4 @@
+import { agreementDestination } from "@/lib/legal-server";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { randomUUID } from "node:crypto";
@@ -38,6 +39,8 @@ export default async function Book({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(next)}`);
+  const legalNext = await agreementDestination(supabase, user.id, next, false);
+  if (legalNext !== next) redirect(legalNext);
   const { data: service, error: serviceError } = await supabase
     .from("services")
     .select("id,name,venue_id,price_minor,currency,duration_minutes")

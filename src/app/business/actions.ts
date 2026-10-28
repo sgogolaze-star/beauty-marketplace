@@ -1,4 +1,5 @@
 "use server";
+import { agreementDestination } from "@/lib/legal-server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +12,13 @@ export async function manageBusiness(form: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=%2Fbusiness");
+  const legalNext = await agreementDestination(
+    supabase,
+    user.id,
+    "/business",
+    true,
+  );
+  if (legalNext !== "/business") redirect(legalNext);
   const get = (key: string) => String(form.get(key) ?? "").trim();
   const fail = (notice = "invalid"): never =>
     redirect(`/business?notice=${notice}`);
