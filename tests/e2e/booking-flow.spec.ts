@@ -29,9 +29,10 @@ test("owner setup → customer booking → cancellation releases availability", 
   );
   test.setTimeout(90000);
   const suffix = testInfo.project.name,
-    studio = `Booking Studio ${suffix}`,
-    treatment = `Care ritual ${suffix}`;
-  const slug = `booking-e2e-${suffix}`;
+    run = Date.now().toString(36),
+    studio = `Booking Studio ${suffix} ${run}`,
+    treatment = `Care ritual ${suffix} ${run}`;
+  const slug = `booking-e2e-${suffix}-${run}`;
   const day = tbilisiDate(new Date(new Date().getTime() + 2 * 86400000));
   await login(page, ownerEmail!, password!);
   await page.goto("/business");
@@ -44,18 +45,18 @@ test("owner setup → customer booking → cancellation releases availability", 
     .locator("section.workspace-panel")
     .filter({ has: page.getByRole("heading", { name: studio, exact: true }) });
   await expect(panel).toBeVisible();
-  await panel.getByRole("button", { name: "Publish studio" }).click();
+  await panel
+    .getByRole("button", { name: "Publish studio", exact: true })
+    .click();
   await expect(page.getByRole("status")).toContainText(
     "public provider contact details",
   );
-  const publicForm = page
-    .locator("section.workspace-panel")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Public provider details",
-        exact: true,
-      }),
-    });
+  const publicForm = page.locator("section.workspace-panel").filter({
+    has: page.getByRole("heading", {
+      name: "Public provider details",
+      exact: true,
+    }),
+  });
   await publicForm
     .getByLabel("Public contact email")
     .fill(`public-${suffix}@example.invalid`);
@@ -67,7 +68,11 @@ test("owner setup → customer booking → cancellation releases availability", 
     .getByLabel("I understand these contact details", { exact: false })
     .check();
   await expect(publicForm.getByRole("checkbox")).toBeChecked();
-  expect(await publicForm.locator("form").evaluate(form => (form as HTMLFormElement).checkValidity())).toBe(true);
+  expect(
+    await publicForm
+      .locator("form")
+      .evaluate((form) => (form as HTMLFormElement).checkValidity()),
+  ).toBe(true);
   await publicForm
     .getByRole("button", { name: "Save public contact details" })
     .click();
@@ -77,9 +82,11 @@ test("owner setup → customer booking → cancellation releases availability", 
     .fill("Public Treatment Street 30, Tbilisi");
   await panel.getByRole("button", { name: "Save service location" }).click();
   await expect(page.getByRole("status")).toContainText("saved");
-  await panel.getByRole("button", { name: "Publish studio" }).click();
+  await panel
+    .getByRole("button", { name: "Publish studio", exact: true })
+    .click();
   await expect(
-    panel.getByRole("button", { name: "Unpublish studio" }),
+    panel.getByRole("button", { name: "Unpublish studio", exact: true }),
   ).toBeVisible();
   await panel
     .locator("summary")
@@ -210,13 +217,19 @@ test("owner setup → customer booking → cancellation releases availability", 
     cp.getByRole("heading", { name: "A different day, perhaps?" }),
   ).toBeVisible();
   await page.goto("/business");
-  await panel.getByRole("button", { name: "Unpublish studio" }).click();
+  await panel
+    .getByRole("button", { name: "Unpublish studio", exact: true })
+    .click();
   await expect(
-    panel.getByRole("button", { name: "Publish studio" }),
+    panel.getByRole("button", { name: "Publish studio", exact: true }),
   ).toBeVisible();
   await cp.goto(`/venues/${slug}`);
-  await expect(cp.getByRole("heading", { name: "This space isn’t here." })).toBeVisible();
-  await expect(cp.getByRole("region", { name: "Service provider details" })).toHaveCount(0);
+  await expect(
+    cp.getByRole("heading", { name: "This space isn’t here." }),
+  ).toBeVisible();
+  await expect(
+    cp.getByRole("region", { name: "Service provider details" }),
+  ).toHaveCount(0);
   await expect(cp.getByRole("link", { name: "Choose time" })).toHaveCount(0);
   await customer.close();
 });

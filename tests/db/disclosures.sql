@@ -3,6 +3,9 @@ insert into auth.users(id) values ('f1100000-0000-4000-8000-000000000001'),('f11
 insert into public.businesses(id,owner_id,name) values ('f1200000-0000-4000-8000-000000000001','f1100000-0000-4000-8000-000000000001','Disclosure test');
 insert into public.provider_public_profiles(business_id,legal_name,operating_status) values ('f1200000-0000-4000-8000-000000000001','Approved legal identity','individual');
 insert into public.venues(id,business_id,slug,name,city,category) values ('f1300000-0000-4000-8000-000000000001','f1200000-0000-4000-8000-000000000001','disclosure-fixture','Disclosure studio','Tbilisi','Hair');
+do $$begin
+  begin insert into public.appointments(venue_id) values ('f1300000-0000-4000-8000-000000000001');raise exception 'Booking without disclosures accepted';exception when check_violation then null;end;
+end$$;
 set local role anon;
 do $$begin
   if exists(select 1 from public.provider_public_profiles where business_id='f1200000-0000-4000-8000-000000000001') then raise exception 'Draft identity exposed';end if;
