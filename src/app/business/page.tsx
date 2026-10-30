@@ -167,7 +167,7 @@ export default async function Business({
               </strong>{" "}
               ·{" "}
               {operatingLabels[profile?.operating_status ?? ""] ??
-                "Contact our review team in Supabase"}
+                "Ask our team to review your legal identity"}
             </p>
             {profile?.company_code && (
               <p>Company registration code: {profile.company_code}</p>
@@ -177,7 +177,7 @@ export default async function Business({
               (profile.operating_status === "company" &&
                 !profile.company_code)) && (
               <p className="notice">
-                A reviewer must complete the approved legal identity in Supabase
+                Our team must complete your legal identity review
                 before you can publish. Do not enter a personal identification
                 number.
               </p>
