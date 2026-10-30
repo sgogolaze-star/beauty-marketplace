@@ -1,0 +1,290 @@
+[
+  {
+    "kind": "terms",
+    "slug": "terms",
+    "version": "2026-10-28-draft",
+    "status": "draft",
+    "titles": {
+      "en": "Terms of use",
+      "ka": "გამოყენების პირობები"
+    },
+    "sections": [
+      {
+        "en": {
+          "title": "About Bloom",
+          "paragraphs": [
+            "Bloom is a working brand for a beauty and wellness booking marketplace in Georgia. Operator: {{legalName}}. Address: {{address}}. Contact: {{contactEmail}}. These details must be completed before these terms take effect.",
+            "These draft terms describe the current preview. They are not an active contract. Publishing a final version requires the operator to confirm the service model and the information below."
+          ]
+        },
+        "ka": {
+          "title": "Bloom-ის შესახებ",
+          "paragraphs": [
+            "Bloom არის საქართველოში სილამაზისა და ველნესის მომსახურებების დაჯავშნის პლატფორმის სამუშაო დასახელება. ოპერატორი: {{legalName}}. მისამართი: {{address}}. საკონტაქტო ელფოსტა: {{contactEmail}}. ეს ინფორმაცია უნდა შეივსოს პირობების ამოქმედებამდე.",
+            "ეს პროექტი აღწერს მიმდინარე საცდელ ვერსიას და მოქმედ ხელშეკრულებას არ წარმოადგენს. საბოლოო ვერსიის გამოქვეყნებამდე ოპერატორმა უნდა დაადასტუროს მომსახურების მოდელი და ქვემოთ მოცემული ინფორმაცია."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Your account",
+          "paragraphs": [
+            "Use accurate account details and keep your password private. Customers can book services. Businesses and independent professionals submit an application for review before provider tools become available. Choosing an account type does not grant provider access.",
+            "The account holder must have legal capacity to enter the relevant agreement. Arrangements for minors and guardian authorization must be finalized before launch; this preview does not verify age."
+          ]
+        },
+        "ka": {
+          "title": "თქვენი ანგარიში",
+          "paragraphs": [
+            "მიუთითეთ ზუსტი მონაცემები და დაიცავით პაროლის კონფიდენციალურობა. მომხმარებელს შეუძლია მომსახურების დაჯავშნა. ბიზნესმა ან დამოუკიდებელმა სპეციალისტმა პროვაიდერის ფუნქციების მისაღებად უნდა წარადგინოს განაცხადი. ანგარიშის ტიპის არჩევა ამ წვდომას ავტომატურად არ ანიჭებს.",
+            "ანგარიშის მფლობელს უნდა შეეძლოს შესაბამისი შეთანხმების დადება. არასრულწლოვანთა სარგებლობისა და კანონიერი წარმომადგენლის თანხმობის წესი ამოქმედებამდე უნდა დაზუსტდეს; საცდელი ვერსია ასაკს არ ამოწმებს."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Bookings and payment",
+          "paragraphs": [
+            "The booking screen shows the treatment, professional, time, duration and price in GEL. Current bookings are paid at the studio; Bloom does not collect an online payment. A confirmed booking appears in your account.",
+            "The final service contract must identify the responsible provider and its contact details before booking. Marketplace and provider responsibilities, complaint handling and any fees must be settled before launch. No marketplace commission or subscription is agreed by this draft."
+          ]
+        },
+        "ka": {
+          "title": "ჯავშნები და გადახდა",
+          "paragraphs": [
+            "დაჯავშნისას ნაჩვენებია მომსახურება, სპეციალისტი, დრო, ხანგრძლივობა და ფასი ლარში. მიმდინარე ვერსიაში გადახდა ხდება ადგილზე; Bloom ონლაინ გადახდას არ იღებს. დადასტურებული ჯავშანი ჩანს თქვენს ანგარიშში.",
+            "დაჯავშნამდე მომსახურების საბოლოო შეთანხმებაში უნდა ჩანდეს პასუხისმგებელი პროვაიდერის ვინაობა და საკონტაქტო ინფორმაცია. პლატფორმისა და პროვაიდერის პასუხისმგებლობები, საჩივრის განხილვა და შესაძლო საფასური ამოქმედებამდე უნდა განისაზღვროს. ამ პროექტით საკომისიო ან სააბონენტო საფასური არ თანხმდება."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Cancellations and your rights",
+          "paragraphs": [
+            "The current app lets customers cancel before the appointment starts and shows the resulting status in their account. Rescheduling, automatic refunds, cancellation fees and no-show charges are not implemented.",
+            "Statutory consumer rights remain unaffected. Before launch, the operator must finalize withdrawal information, any express request for early service performance, and a durable booking confirmation. Do not interpret this draft as a waiver of a statutory withdrawal right."
+          ]
+        },
+        "ka": {
+          "title": "გაუქმება და თქვენი უფლებები",
+          "paragraphs": [
+            "მიმდინარე აპში მომხმარებელს შეუძლია ჯავშნის გაუქმება ვიზიტის დაწყებამდე. განახლებული სტატუსი ჩანს მის ანგარიშში. გადაჯავშნა, ავტომატური დაბრუნება, გაუქმების ან გამოუცხადებლობის საფასური ჯერ არ არის დანერგილი.",
+            "კანონით გათვალისწინებული მომხმარებლის უფლებები ძალაში რჩება. ამოქმედებამდე უნდა დაზუსტდეს ხელშეკრულებაზე უარის თქმის ინფორმაცია, მომსახურების ვადაზე ადრე დაწყების პირდაპირი მოთხოვნა და ჯავშნის დადასტურება შენახვადი ფორმით. ეს პროექტი კანონით მინიჭებულ უფლებაზე უარს არ ნიშნავს."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Safe use and service concerns",
+          "paragraphs": [
+            "Do not impersonate another person, submit misleading listings, scrape private information, abuse bookings or interfere with the service. Provider approval is a platform review and does not certify medical suitability or every professional qualification.",
+            "For a treatment concern, contact the responsible provider. For account or platform concerns, use {{contactEmail}} once the operator activates that contact. Mandatory legal remedies and rights are not excluded."
+          ]
+        },
+        "ka": {
+          "title": "უსაფრთხო სარგებლობა და მომსახურების საკითხები",
+          "paragraphs": [
+            "აკრძალულია სხვისი სახელით სარგებლობა, შეცდომაში შემყვანი განცხადებები, პირადი ინფორმაციის უნებართვო მოპოვება, ჯავშნების ბოროტად გამოყენება ან სერვისის მუშაობის შეფერხება. პლატფორმის მიერ განაცხადის დამტკიცება არ წარმოადგენს სამედიცინო ვარგისიანობის ან ყველა კვალიფიკაციის სერტიფიცირებას.",
+            "მომსახურებასთან დაკავშირებული საკითხით მიმართეთ პასუხისმგებელ პროვაიდერს. ანგარიშისა და პლატფორმის საკითხებისთვის გამოიყენეთ {{contactEmail}}, როდესაც ოპერატორი ამ არხს აამოქმედებს. კანონით სავალდებულო დაცვის საშუალებები და უფლებები არ იზღუდება."
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "privacy",
+    "slug": "privacy",
+    "version": "2026-10-28-draft",
+    "status": "draft",
+    "titles": {
+      "en": "Privacy notice",
+      "ka": "კონფიდენციალურობის შეტყობინება"
+    },
+    "sections": [
+      {
+        "en": {
+          "title": "Who is responsible",
+          "paragraphs": [
+            "Controller: {{legalName}}. Address: {{address}}. Privacy contact: {{contactEmail}}. This draft is not a complete collection notice until the controller and unresolved operating details are confirmed."
+          ]
+        },
+        "ka": {
+          "title": "ვინ არის პასუხისმგებელი",
+          "paragraphs": [
+            "დამუშავებისთვის პასუხისმგებელი პირი: {{legalName}}. მისამართი: {{address}}. კონფიდენციალურობის საკითხებისთვის: {{contactEmail}}. პასუხისმგებელი პირისა და დარჩენილი საოპერაციო დეტალების დაზუსტებამდე ეს პროექტი სრულ შეტყობინებას არ წარმოადგენს."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Information used by the app",
+          "paragraphs": [
+            "Accounts use name, email, authentication identifiers and session information. Provider applications include contact details, service area, professional experience, description, legal provider name, operating status and contact address. Optional fields include a portfolio, company code and qualification summary.",
+            "Bookings store customer/provider references, service and professional, time, price/duration snapshots and status. Provider review decisions and reasons are retained. When final policies are activated, a policy receipt records the account, document version, language and server timestamp; acknowledging a privacy notice is not marketing consent."
+          ]
+        },
+        "ka": {
+          "title": "რა ინფორმაციას იყენებს აპი",
+          "paragraphs": [
+            "ანგარიშისთვის გამოიყენება სახელი, ელფოსტა, ავთენტიფიკაციის იდენტიფიკატორები და სესიის ინფორმაცია. პროვაიდერის განაცხადი მოიცავს კონტაქტს, მომსახურების არეალს, გამოცდილებას, აღწერას, იურიდიულ სახელს, საქმიანობის სტატუსსა და მისამართს. პორტფოლიო, კომპანიის კოდი და კვალიფიკაციის აღწერა არასავალდებულოა.",
+            "ჯავშანში ინახება მომხმარებლისა და პროვაიდერის იდენტიფიკატორები, მომსახურება, სპეციალისტი, დრო, დაჯავშნისას მოქმედი ფასი და ხანგრძლივობა, სტატუსი. ინახება განაცხადის განხილვის გადაწყვეტილებები და მიზეზები. საბოლოო დოკუმენტების ამოქმედების შემდეგ ჩანაწერი დააფიქსირებს ანგარიშს, დოკუმენტის ვერსიას, ენასა და სერვერის დროს; შეტყობინების გაცნობა მარკეტინგულ თანხმობას არ ნიშნავს."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Purpose and legal basis",
+          "paragraphs": [
+            "The app uses information to provide account access, manage bookings, assess provider applications and protect the service. Required fields are necessary for those app functions; optional fields can be left blank. Declining required fields prevents the corresponding account or application submission.",
+            "The controller must finalize the purpose-specific legal bases and any legitimate-interest assessment before launch: {{processingBasis}}. No advertising subscription or marketing consent is requested in the current signup."
+          ]
+        },
+        "ka": {
+          "title": "მიზანი და სამართლებრივი საფუძველი",
+          "paragraphs": [
+            "ინფორმაცია გამოიყენება ანგარიშზე წვდომისთვის, ჯავშნების მართვისთვის, პროვაიდერის განაცხადის შესაფასებლად და სერვისის დასაცავად. სავალდებულო ველები საჭიროა შესაბამისი ფუნქციისთვის; არასავალდებულო ველები შეგიძლიათ ცარიელი დატოვოთ. აუცილებელი მონაცემების მიუთითებლობისას შესაბამისი ანგარიში ან განაცხადი ვერ გაიგზავნება.",
+            "ამოქმედებამდე პასუხისმგებელმა პირმა უნდა განსაზღვროს თითოეული მიზნის სამართლებრივი საფუძველი და, საჭიროებისას, კანონიერი ინტერესის შეფასება: {{processingBasis}}. მიმდინარე რეგისტრაცია არ ითხოვს რეკლამის გამოწერას ან მარკეტინგულ თანხმობას."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Access, hosting and transfers",
+          "paragraphs": [
+            "Your application and review records are private to your account and trusted reviewers. Published studio/service information is public. Providers can access bookings for their own business. Database access is restricted by ownership and row-level security.",
+            "Supabase supports authentication and database storage; Vercel hosts the app. Their infrastructure may process request and security metadata. Confirmed recipients, locations and safeguards for transfers outside Georgia must be completed before launch: {{transfers}}."
+          ]
+        },
+        "ka": {
+          "title": "წვდომა, ჰოსტინგი და გადაცემა",
+          "paragraphs": [
+            "განაცხადი და განხილვის ჩანაწერები ხელმისაწვდომია თქვენი ანგარიშისა და უფლებამოსილი შემფასებლებისთვის. გამოქვეყნებული სტუდიისა და მომსახურებების ინფორმაცია საჯაროა. პროვაიდერს წვდომა აქვს თავისი ბიზნესის ჯავშნებზე. მონაცემთა ბაზაში წვდომა შეზღუდულია მფლობელობისა და ჩანაწერის დონის წესებით.",
+            "Supabase გამოიყენება ავთენტიფიკაციისა და მონაცემთა ბაზისთვის, Vercel კი აპის ჰოსტინგისთვის. მათმა ინფრასტრუქტურამ შეიძლება დაამუშაოს მოთხოვნისა და უსაფრთხოების ტექნიკური მონაცემები. ამოქმედებამდე უნდა დაზუსტდეს მიმღებები, ადგილმდებარეობა და საქართველოს გარეთ გადაცემის დაცვის მექანიზმები: {{transfers}}."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Retention and your requests",
+          "paragraphs": [
+            "Retention periods or criteria for accounts, bookings, applications, receipts, logs and backups must be finalized: {{retention}}. No automatic retention/deletion schedule or self-service account deletion is implemented in this preview.",
+            "Once the operator contact is active, you can request access, correction or deletion, or exercise other applicable rights through {{contactEmail}}. Identity must be checked proportionately. This draft does not reduce rights provided by Georgian law or access to the competent supervisory body."
+          ]
+        },
+        "ka": {
+          "title": "შენახვა და თქვენი მოთხოვნები",
+          "paragraphs": [
+            "ანგარიშების, ჯავშნების, განაცხადების, დოკუმენტების ჩანაწერების, ლოგებისა და სარეზერვო ასლების შენახვის ვადები ან კრიტერიუმები უნდა განისაზღვროს: {{retention}}. საცდელ ვერსიაში ავტომატური წაშლის გრაფიკი ან ანგარიშის თვითმომსახურებით წაშლა არ არის დანერგილი.",
+            "ოპერატორის საკონტაქტო არხის ამოქმედების შემდეგ შეგიძლიათ მოითხოვოთ წვდომა, შესწორება, წაშლა ან კანონით გათვალისწინებული სხვა უფლების განხორციელება მისამართზე {{contactEmail}}. ვინაობა უნდა შემოწმდეს თანაზომიერად. ეს პროექტი არ ზღუდავს საქართველოს კანონით მინიჭებულ უფლებებს ან უფლებამოსილი საზედამხედველო ორგანოსთვის მიმართვას."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Sessions and sensitive information",
+          "paragraphs": [
+            "The app uses necessary authentication cookies to keep you signed in. Optional analytics and advertising integrations are not configured. Blocking necessary cookies can prevent sign-in.",
+            "Do not enter ID scans, bank details, health histories or client-sensitive information in signup/application free text. A future payment flow or special treatment questionnaire will need a separate assessment and notice."
+          ]
+        },
+        "ka": {
+          "title": "სესიები და სენსიტიური ინფორმაცია",
+          "paragraphs": [
+            "აპი იყენებს ავთენტიფიკაციის აუცილებელ ქუქი-ფაილებს სესიის შესანარჩუნებლად. არასავალდებულო ანალიტიკისა და სარეკლამო ინტეგრაციები არ არის ჩართული. აუცილებელი ქუქი-ფაილების დაბლოკვამ შეიძლება შესვლას ხელი შეუშალოს.",
+            "რეგისტრაციისა და განაცხადის თავისუფალ ველებში ნუ მიუთითებთ პირადობის დოკუმენტებს, საბანკო მონაცემებს, ჯანმრთელობის ისტორიას ან კლიენტის სენსიტიურ ინფორმაციას. მომავალი გადახდის ფუნქცია ან სპეციალური კითხვარი ცალკე შეფასებასა და შეტყობინებას საჭიროებს."
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "kind": "provider_terms",
+    "slug": "providers",
+    "version": "2026-10-28-draft",
+    "status": "draft",
+    "titles": {
+      "en": "Provider agreement",
+      "ka": "პროვაიდერის შეთანხმება"
+    },
+    "sections": [
+      {
+        "en": {
+          "title": "Who this is for",
+          "paragraphs": [
+            "This draft covers businesses and independent professionals applying to offer services through Bloom. The operator is {{legalName}}, at {{address}}, contact {{contactEmail}}. It is not an active provider contract."
+          ]
+        },
+        "ka": {
+          "title": "ვის ეხება შეთანხმება",
+          "paragraphs": [
+            "ეს პროექტი ეხება ბიზნესებსა და დამოუკიდებელ სპეციალისტებს, რომლებიც Bloom-ზე მომსახურების შეთავაზებისთვის განაცხადს წარადგენენ. ოპერატორი: {{legalName}}, მისამართი: {{address}}, კონტაქტი: {{contactEmail}}. ეს ჯერ მოქმედი შეთანხმება არ არის."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Application and review",
+          "paragraphs": [
+            "Give accurate legal identity, contact and service information and confirm that you are authorized to offer the services. Public display names may differ from legal identity. Do not include another person’s private information without authority.",
+            "Our team reviews applications in Supabase. Pending applications are locked during review. A rejection includes a reason and can be updated and resubmitted. Approval creates a private draft workspace, not a public listing or a guarantee of bookings."
+          ]
+        },
+        "ka": {
+          "title": "განაცხადი და განხილვა",
+          "paragraphs": [
+            "მიუთითეთ ზუსტი იურიდიული, საკონტაქტო და მომსახურების მონაცემები და დაადასტურეთ საქმიანობის უფლებამოსილება. საჯარო დასახელება შეიძლება განსხვავდებოდეს იურიდიული სახელისგან. სხვის პირად ინფორმაციას უფლებამოსილების გარეშე ნუ შეიტანთ.",
+            "გუნდი განაცხადებს Supabase-ში განიხილავს. განხილვისას განაცხადის მონაცემები ჩაკეტილია. უარყოფის მიზეზი ხელმისაწვდომია და შესაძლებელია შესწორებული განაცხადის ხელახლა გაგზავნა. დამტკიცება ქმნის პირად სამუშაო სივრცეს და არა საჯარო განცხადებას ან ჯავშნების გარანტიას."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Service responsibilities",
+          "paragraphs": [
+            "Keep services, prices, staff assignments and availability accurate. Be responsible for the permissions, qualifications and registrations applicable to your actual services, and make no misleading claims. Approval is not a substitute for those requirements.",
+            "Before a live customer booking, the final flow must show the provider’s identity/contact, full price and applicable service and cancellation terms. The provider and marketplace roles, including complaint and legal notice arrangements, must be confirmed before publication."
+          ]
+        },
+        "ka": {
+          "title": "მომსახურებაზე პასუხისმგებლობა",
+          "paragraphs": [
+            "ზუსტად მართეთ მომსახურებები, ფასები, სპეციალისტების დანიშვნა და თავისუფალი დრო. უზრუნველყავით თქვენი კონკრეტული მომსახურებისთვის საჭირო უფლებამოსილება, კვალიფიკაცია და რეგისტრაცია; ნუ გააკეთებთ შეცდომაში შემყვან განცხადებებს. პლატფორმის დამტკიცება ამ მოთხოვნებს არ ანაცვლებს.",
+            "მომხმარებლის რეალურ დაჯავშნამდე საბოლოო პროცესში უნდა ჩანდეს პროვაიდერის ვინაობა და კონტაქტი, სრული ფასი და მომსახურებისა და გაუქმების პირობები. პროვაიდერისა და პლატფორმის როლები, საჩივრებისა და იურიდიული შეტყობინებების წესის ჩათვლით, გამოქვეყნებამდე უნდა განისაზღვროს."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Payments and customer information",
+          "paragraphs": [
+            "Current appointments are paid at the studio. Online collection, payouts, refunds and platform commission billing are not implemented. No fee schedule or payment-provider contract is created by this draft.",
+            "Use booking information only to provide and manage the relevant appointment, meet applicable obligations and resolve related issues. Do not copy it into marketing lists or disclose it without a valid basis. Providers must determine their own data-protection responsibilities."
+          ]
+        },
+        "ka": {
+          "title": "გადახდა და მომხმარებლის ინფორმაცია",
+          "paragraphs": [
+            "მიმდინარე ვიზიტებზე გადახდა ხდება ადგილზე. ონლაინ თანხის მიღება, გადარიცხვები, დაბრუნება და პლატფორმის საკომისიოს დარიცხვა ჯერ არ არის დანერგილი. ეს პროექტი საფასურის გრაფიკს ან გადახდის პროვაიდერთან ხელშეკრულებას არ ქმნის.",
+            "ჯავშნის ინფორმაცია გამოიყენეთ შესაბამისი ვიზიტის მომსახურებისა და მართვისთვის, შესაბამისი ვალდებულებების შესასრულებლად და საკითხების მოსაგვარებლად. ნუ დაამატებთ მას მარკეტინგულ სიებში და ნუ გაამჟღავნებთ სათანადო საფუძვლის გარეშე. პროვაიდერმა უნდა განსაზღვროს მონაცემთა დაცვის საკუთარი პასუხისმგებლობები."
+          ]
+        }
+      },
+      {
+        "en": {
+          "title": "Changes, disputes and ending participation",
+          "paragraphs": [
+            "Keep a record of the agreement version shown when you join. A material change needs clear notice and a new version. This draft does not bind you to future unspecified fees or remove mandatory rights.",
+            "A provider suspension/appeal workflow is not yet implemented. Final suspension, termination, complaint contact and outstanding-booking arrangements must be agreed before launch."
+          ]
+        },
+        "ka": {
+          "title": "ცვლილებები, დავები და მონაწილეობის დასრულება",
+          "paragraphs": [
+            "შეინახეთ გაწევრებისას ნაჩვენები შეთანხმების ვერსია. არსებითი ცვლილება მოითხოვს მკაფიო შეტყობინებასა და ახალ ვერსიას. ეს პროექტი არ გაკისრებთ მომავალში დაუზუსტებელ საფასურს და არ ზღუდავს კანონით სავალდებულო უფლებებს.",
+            "პროვაიდერის შეჩერებისა და გასაჩივრების პროცესი ჯერ არ არის დანერგილი. შეჩერების, მონაწილეობის დასრულების, საჩივრის კონტაქტისა და დარჩენილი ჯავშნების საბოლოო წესები ამოქმედებამდე უნდა შეთანხმდეს."
+          ]
+        }
+      }
+    ]
+  }
+]
